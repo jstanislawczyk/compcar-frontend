@@ -56,12 +56,25 @@ export default {
     height: 50px;
     background: $violet-purple-gradient;
 
+    @media (min-width: $tablet)  {
+      height: 70px;
+    }
+
     @media (min-width: $desktop-small)  {
+      height: 50px;
       justify-content: space-between;
     }
 
     &__logo {
       font-size: 22px;
+
+      @media (min-width: $tablet)  {
+        font-size: 30px;
+      }
+
+      @media (min-width: $desktop-small)  {
+        font-size: 22px;
+      }
     }
 
     &__links {
