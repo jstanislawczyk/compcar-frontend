@@ -12,7 +12,6 @@
     justify-content: center;
     flex-direction: column;
     height: 100%;
-    width: 100%;
 
     &__code {
       font-size: 150px;
