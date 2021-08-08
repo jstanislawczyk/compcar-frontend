@@ -36,6 +36,7 @@ export default {
 <style scoped lang="scss">
   @import "scss/variables/colors";
   @import "scss/variables/gradients";
+  @import "scss/variables/devices";
 
   .register {
     display: flex;
@@ -47,6 +48,7 @@ export default {
 
     &__panel {
       width: 95%;
+      max-width: 600px;
       border-radius: 4px;
       overflow: hidden
     }
@@ -79,16 +81,28 @@ export default {
       flex-direction: column;
       justify-content: left;
       padding: 20px 0 0;
+
+      @media (min-width: $tablet)  {
+        flex-direction: row;
+        justify-content: space-between;
+      }
     }
 
     &__input-title {
+      flex-basis: 30%;
       margin: 0 0 5px;
       text-align: left;
       font-size: 14px;
+
+      @media (min-width: $tablet)  {
+        margin: 0;
+        line-height: 32px;
+      }
     }
 
     &__input {
       height: 30px;
+      width: 100%;
       border: none;
       border-radius: 3px;
       font-size: 15px;
