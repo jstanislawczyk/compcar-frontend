@@ -1,0 +1,11 @@
+@import "scss/variables/colors";
+
+@mixin button($background-color: $light-red, $color: $white) {
+  width: 100px;
+  height: 35px;
+  margin: 40px 0 20px;
+  background: $background-color;
+  border: none;
+  border-radius: 3px;
+  color: $color;
+}
