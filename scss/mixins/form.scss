@@ -1,4 +1,5 @@
 @import "scss/variables/gradients";
+@import "scss/variables/colors";
 @import "scss/variables/devices";
 @import "scss/mixins/controls";
 
@@ -72,6 +73,16 @@
     font-size: 15px;
     background: $light-grey;
     color: $grey;
+  }
+
+  &__error {
+    margin: 5px 0 0;
+    font-size: 14px;
+    color: $red;
+
+    &:first-of-type {
+      margin-top: 30px;
+    }
   }
 
   &__button {

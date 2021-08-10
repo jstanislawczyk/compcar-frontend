@@ -20,6 +20,10 @@
             <input class="register__input" type="password" v-model="registerData.passwordRepeat">
           </div>
 
+          <p class="register__error" v-for="(error, index) in errors" :key="index">
+            {{ error }}
+          </p>
+
           <button class="register__button">Register</button>
         </form>
       </div>
@@ -28,6 +32,8 @@
 </template>
 
 <script>
+import validator from 'validator/es';
+
 export default {
   name: 'Register',
   data() {
@@ -37,11 +43,56 @@ export default {
         password: '',
         passwordRepeat: '',
       },
+      errors: [],
     };
   },
   methods: {
     registerUser() {
-      console.log(this.registerData.email);
+      this.getValidationErrors();
+
+      if (this.errors.length === 0) {
+        console.log('Valid');
+      }
+    },
+    getValidationErrors() {
+      const errors = [];
+
+      this.validateEmail(this.registerData.email);
+      this.validatePassword(this.registerData.password);
+      this.validatePasswordEquality(this.registerData.password, this.registerData.passwordRepeat);
+
+      return errors;
+    },
+    validateEmail(email) {
+      if (!validator.isEmail(email)) {
+        this.errors.push('Should be an email');
+      }
+    },
+    validatePassword(password) {
+      const min = 3;
+      const max = 80;
+      const hasPasswordCorrectLength = validator.isLength(password, { min, max });
+
+      if (!hasPasswordCorrectLength) {
+        this.errors.push(`Password should have length between ${min} and ${max}`);
+      }
+
+      const hasNoLowerCase = !(/[a-z]/.test(password));
+
+      if (hasNoLowerCase) {
+        this.errors.push('Password requires at least one lowercase letter');
+      }
+
+      const hasNoUpperCase = !(/[A-Z]/.test(password));
+
+      if (hasNoUpperCase) {
+        this.errors.push('Password requires at least one uppercase letter');
+      }
+    },
+    validatePasswordEquality(password, passwordRepeat) {
+      if (password !== passwordRepeat) {
+        this.errors.push('Password and password repeat should be equal');
+      }
     },
   },
 };
