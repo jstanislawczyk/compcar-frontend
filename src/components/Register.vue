@@ -33,6 +33,8 @@
 
 <script>
 import validator from 'validator/es';
+import gql from 'graphql-tag';
+import { parseGraphQlErrorMessage } from '@/common/errors';
 
 export default {
   name: 'Register',
@@ -47,11 +49,11 @@ export default {
     };
   },
   methods: {
-    registerUser() {
+    async registerUser() {
       this.getValidationErrors();
 
       if (this.errors.length === 0) {
-        console.log('Valid');
+        await this.register();
       }
     },
     getValidationErrors() {
@@ -91,6 +93,37 @@ export default {
       if (password !== passwordRepeat) {
         this.errors.push('Password and password repeat should be equal');
       }
+    },
+    async register() {
+      try {
+        await this.$apollo.mutate({
+          mutation: this.getRegisterQuery(),
+        });
+        await this.$router.push('/login');
+      } catch (error) {
+        const parsedError = parseGraphQlErrorMessage(error);
+
+        this.errors.push(parsedError);
+      }
+    },
+    getRegisterQuery() {
+      return gql`
+        mutation {
+          register (
+            registerInput: {
+              email: "${this.registerData.email}",
+              password: "${this.registerData.password}",
+              passwordRepeat: "${this.registerData.passwordRepeat}",
+            }
+          ) {
+            id,
+            email,
+            registerDate,
+            activated,
+            role,
+          }
+        }
+      `;
     },
   },
 };
