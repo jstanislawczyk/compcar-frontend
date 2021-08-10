@@ -55,13 +55,11 @@ export default {
       }
     },
     getValidationErrors() {
-      const errors = [];
+      this.errors = [];
 
       this.validateEmail(this.registerData.email);
       this.validatePassword(this.registerData.password);
       this.validatePasswordEquality(this.registerData.password, this.registerData.passwordRepeat);
-
-      return errors;
     },
     validateEmail(email) {
       if (!validator.isEmail(email)) {
