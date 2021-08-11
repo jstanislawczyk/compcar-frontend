@@ -58,10 +58,10 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  @import "scss/variables/colors";
-  @import "scss/variables/gradients";
-  @import "scss/variables/devices";
-  @import "scss/mixins/shapes";
+  @import 'scss/variables/colors';
+  @import 'scss/variables/gradients';
+  @import 'scss/variables/devices';
+  @import 'scss/mixins/shapes';
 
   .nav {
     &__main {
