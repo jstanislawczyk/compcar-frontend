@@ -1,17 +1,11 @@
 import Vue from 'vue';
+import VueApollo from 'vue-apollo';
 import App from './App.vue';
 import router from './router';
 import store from './store';
-import ApolloClient from 'apollo-boost';
-import VueApollo from 'vue-apollo';
+import apolloProvider from './graphql';
 
 Vue.config.productionTip = false;
-
-const apolloProvider = new VueApollo({
-  defaultClient: new ApolloClient({
-    uri: 'http://localhost:4000',
-  }),
-});
 
 Vue.use(VueApollo);
 
