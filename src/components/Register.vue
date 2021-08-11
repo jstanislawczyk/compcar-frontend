@@ -100,6 +100,10 @@ export default {
           mutation: this.getRegisterQuery(),
         });
         await this.$router.push('/login');
+        this.$store.commit('toggleInfoPanel', {
+          message: 'User registered successfully',
+          type: 'success',
+        });
       } catch (error) {
         const parsedError = parseGraphQlErrorMessage(error);
 
