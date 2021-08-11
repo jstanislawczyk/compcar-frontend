@@ -1,4 +1,4 @@
-@import "scss/variables/colors";
+@import 'scss/variables/colors';
 
 @mixin cross($height: 25px, $width: 25px, $background-color: $white, $thickness: 2px) {
   display: flex;

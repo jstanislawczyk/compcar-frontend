@@ -30,7 +30,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  @import "scss/mixins/form";
+  @import 'scss/mixins/form';
 
   .login {
     @include form;

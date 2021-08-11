@@ -1,7 +1,7 @@
-@import "scss/variables/gradients";
-@import "scss/variables/colors";
-@import "scss/variables/devices";
-@import "scss/mixins/controls";
+@import 'scss/variables/gradients';
+@import 'scss/variables/colors';
+@import 'scss/variables/devices';
+@import 'scss/mixins/controls';
 
 @mixin form() {
   display: flex;

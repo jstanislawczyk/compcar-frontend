@@ -11,7 +11,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  @import "scss/variables/devices";
+  @import 'scss/variables/devices';
 
   .main {
     height: calc(100% - 50px);

@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <InfoPanel></InfoPanel>
     <Nav />
     <Main />
   </div>
@@ -8,10 +9,12 @@
 <script>
 import Nav from '@/components/Nav.vue';
 import Main from '@/components/Main.vue';
+import InfoPanel from '@/components/InfoPanel';
 
 export default {
   name: 'App',
   components: {
+    InfoPanel,
     Nav,
     Main,
   },
@@ -19,7 +22,6 @@ export default {
 </script>
 
 <style lang="scss">
-
   @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap');
 
   html, body {
