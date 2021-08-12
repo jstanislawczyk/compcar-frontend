@@ -6,7 +6,7 @@
       </div>
 
       <div class="register__form-wrapper">
-        <form class="register__form" @submit.prevent="registerUser" >
+        <form class="register__form" @submit.prevent="registerUser">
           <div class="register__input-wrapper">
             <p class="register__input-title">Email</p>
             <input class="register__input" type="email" v-model="registerData.email">

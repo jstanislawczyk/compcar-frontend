@@ -10,16 +10,22 @@ export default new Vuex.Store({
       type: '',
       message: '',
     },
+    authentication: {
+      token: undefined,
+    },
   },
   mutations: {
-    toggleInfoPanel(state, payload) {
-      this.state.infoPanel.message = payload.message || 'Unknown message';
-      this.state.infoPanel.type = payload.type || 'success';
+    toggleInfoPanel(state, infoPanelData) {
+      this.state.infoPanel.message = infoPanelData.message || 'Unknown message';
+      this.state.infoPanel.type = infoPanelData.type || 'success';
       this.state.infoPanel.isOpened = true;
 
       setTimeout(() => {
         this.state.infoPanel.isOpened = false;
       }, 3000);
+    },
+    setAuthToken(state, token) {
+      this.state.authentication.token = token;
     },
   },
   actions: {
