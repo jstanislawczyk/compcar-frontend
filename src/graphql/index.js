@@ -4,7 +4,7 @@ import Vue from 'vue';
 
 const apolloProvider = new VueApollo({
   defaultClient: new ApolloClient({
-    uri: process.env.graphqlUrl || 'http://localhost:4000',
+    uri: process.env.GRAPHQL_CAR_SERVICE_URL || 'http://localhost:4000',
   }),
 });
 
