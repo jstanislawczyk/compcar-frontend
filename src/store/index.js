@@ -27,6 +27,9 @@ export default new Vuex.Store({
     setAuthToken(state, token) {
       this.state.authentication.token = token;
     },
+    logoutUser() {
+      this.state.authentication.token = undefined;
+    },
   },
   actions: {
   },

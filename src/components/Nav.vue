@@ -2,18 +2,21 @@
   <nav class="nav">
     <div class="nav__main">
       <div class="nav__logo">
-        <router-link to="/" class="nav__link">Compcarly</router-link>
+        <router-link to="/" class="nav__link nav__link--logo">Compcarly</router-link>
       </div>
 
       <div class="nav__links">
         <div class="nav__button">
           <router-link to="/" class="nav__link nav__link--underlined">Home</router-link>
         </div>
-        <div class="nav__button">
+        <div class="nav__button" v-if="!this.isAuthenticated()">
           <router-link to="/register" class="nav__link nav__link--underlined">Register</router-link>
         </div>
-        <div class="nav__button">
+        <div class="nav__button" v-if="!this.isAuthenticated()">
           <router-link to="/login" class="nav__link nav__link--underlined">Login</router-link>
+        </div>
+        <div class="nav__button" v-if="this.isAuthenticated()">
+          <button class="nav__link nav__link--underlined" v-on:click="logoutUser()">Logout</button>
         </div>
       </div>
 
@@ -31,19 +34,27 @@
       <div class="nav__button">
         <router-link to="/" class="nav__link">Home</router-link>
       </div>
-      <div class="nav__button">
+      <div class="nav__button" v-if="!this.isAuthenticated()">
         <router-link to="/register" class="nav__link">Register</router-link>
       </div>
-      <div class="nav__button">
+      <div class="nav__button" v-if="!this.isAuthenticated()">
         <router-link to="/login" class="nav__link">Login</router-link>
+      </div>
+      <div class="nav__button" v-if="this.isAuthenticated()">
+        <button class="nav__link">Logout</button>
       </div>
     </div>
   </nav>
 </template>
 
 <script>
+import authMixin from '@/mixins/auth.mixin';
+
 export default {
   name: 'Nav',
+  mixins: [
+    authMixin,
+  ],
   data() {
     return {
       isMobileMenuClosed: true,
@@ -52,6 +63,14 @@ export default {
   methods: {
     toggleMobileMenu: function() {
       this.isMobileMenuClosed = !this.isMobileMenuClosed;
+    },
+    async logoutUser() {
+      this.$store.commit('logoutUser');
+      await this.$router.push('/').catch(() => {});
+      this.$store.commit('toggleInfoPanel', {
+        message: 'User logged out successfully',
+        type: 'success',
+      });
     },
   },
 };
@@ -80,18 +99,6 @@ export default {
       @media (min-width: $desktop-small)  {
         height: 50px;
         justify-content: space-between;
-      }
-    }
-
-    &__logo {
-      font-size: 22px;
-
-      @media (min-width: $tablet)  {
-        font-size: 30px;
-      }
-
-      @media (min-width: $desktop-small)  {
-        font-size: 22px;
       }
     }
 
@@ -131,8 +138,24 @@ export default {
     }
 
     &__link {
-      text-decoration: none;
+      background: none;
+      border: none;
+      font-size: 16px;
       color: $white;
+      text-decoration: none;
+      cursor: pointer;
+
+      &--logo {
+        font-size: 22px;
+
+        @media (min-width: $tablet)  {
+          font-size: 30px;
+        }
+
+        @media (min-width: $desktop-small)  {
+          font-size: 22px;
+        }
+      }
 
       &--underlined {
         display: block;
@@ -162,9 +185,6 @@ export default {
     }
 
     &__button {
-      font-size: 16px;
-      color: $white;
-
       @media (min-width: $desktop-small)  {
         &:not(:last-child) {
           margin-right: 30px;
