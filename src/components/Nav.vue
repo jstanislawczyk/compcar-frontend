@@ -2,7 +2,7 @@
   <nav class="nav">
     <div class="nav__main">
       <div class="nav__logo">
-        <router-link to="/" class="nav__link">Compcarly</router-link>
+        <router-link to="/" class="nav__link nav__link--logo">Compcarly</router-link>
       </div>
 
       <div class="nav__links">
@@ -102,18 +102,6 @@ export default {
       }
     }
 
-    &__logo {
-      font-size: 22px;
-
-      @media (min-width: $tablet)  {
-        font-size: 30px;
-      }
-
-      @media (min-width: $desktop-small)  {
-        font-size: 22px;
-      }
-    }
-
     &__links {
       display: none;
 
@@ -156,6 +144,18 @@ export default {
       color: $white;
       text-decoration: none;
       cursor: pointer;
+
+      &--logo {
+        font-size: 22px;
+
+        @media (min-width: $tablet)  {
+          font-size: 30px;
+        }
+
+        @media (min-width: $desktop-small)  {
+          font-size: 22px;
+        }
+      }
 
       &--underlined {
         display: block;
