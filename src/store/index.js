@@ -24,10 +24,18 @@ export default new Vuex.Store({
         this.state.infoPanel.isOpened = false;
       }, 3000);
     },
+    initAuthToken() {
+      if (!this.state.authentication.token) {
+        const cachedToken = localStorage.getItem('authToken');
+        this.state.authentication.token = cachedToken || undefined;
+      }
+    },
     setAuthToken(state, token) {
+      localStorage.setItem('authToken', token);
       this.state.authentication.token = token;
     },
     logoutUser() {
+      localStorage.removeItem('authToken');
       this.state.authentication.token = undefined;
     },
   },
