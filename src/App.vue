@@ -18,6 +18,9 @@ export default {
     Nav,
     Main,
   },
+  mounted() {
+    this.$store.commit('initAuthToken');
+  },
 };
 </script>
 
