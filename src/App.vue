@@ -3,13 +3,15 @@
     <InfoPanel></InfoPanel>
     <Nav />
     <Main />
+    <CookieBanner v-if="!$store.state.cookieBanner.isClosed"/>
   </div>
 </template>
 
 <script>
+import InfoPanel from '@/components/InfoPanel';
 import Nav from '@/components/Nav.vue';
 import Main from '@/components/Main.vue';
-import InfoPanel from '@/components/InfoPanel';
+import CookieBanner from '@/components/CookieBanner.vue';
 
 export default {
   name: 'App',
@@ -17,9 +19,11 @@ export default {
     InfoPanel,
     Nav,
     Main,
+    CookieBanner,
   },
   mounted() {
     this.$store.commit('initAuthToken');
+    this.$store.commit('initCookieBanner');
   },
 };
 </script>

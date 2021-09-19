@@ -61,7 +61,7 @@ export default {
     };
   },
   methods: {
-    toggleMobileMenu: function() {
+    toggleMobileMenu() {
       this.isMobileMenuClosed = !this.isMobileMenuClosed;
     },
     async logoutUser() {

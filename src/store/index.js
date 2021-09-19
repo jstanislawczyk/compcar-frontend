@@ -10,6 +10,9 @@ export default new Vuex.Store({
       type: '',
       message: '',
     },
+    cookieBanner: {
+      isClosed: false,
+    },
     authentication: {
       token: undefined,
     },
@@ -37,6 +40,16 @@ export default new Vuex.Store({
     logoutUser() {
       localStorage.removeItem('authToken');
       this.state.authentication.token = undefined;
+    },
+    initCookieBanner() {
+      if (!this.state.cookieBanner.isClosed) {
+        const isCookieBannerClosed = localStorage.getItem('isCookieBannerClosed');
+        this.state.cookieBanner.isClosed = isCookieBannerClosed === 'true';
+      }
+    },
+    closeCookieBanner() {
+      this.state.cookieBanner.isClosed = true;
+      localStorage.setItem('isCookieBannerClosed', 'true');
     },
   },
   actions: {
