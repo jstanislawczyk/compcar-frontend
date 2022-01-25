@@ -131,7 +131,6 @@ export default {
     }
 
     .results {
-      height: 80px;
       width: 100%;
 
       &__title {
@@ -140,17 +139,14 @@ export default {
       }
 
       &__tiles {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-around;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        grid-gap: 40px 30px;
         padding: 30px 40px;
       }
     }
 
     .result-tile {
-      flex: 0 0 300px;
-      margin: 0 10px 30px;
-
       &__image {
         width: 100%;
       }
@@ -194,7 +190,7 @@ export default {
       &__link {
         @include button;
 
-        margin-bottom: 10px;
+        margin-bottom: 15px;
       }
     }
   }
