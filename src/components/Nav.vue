@@ -78,7 +78,6 @@ export default {
 
 <style scoped lang="scss">
   @import 'scss/variables/colors';
-  @import 'scss/variables/gradients';
   @import 'scss/variables/devices';
   @import 'scss/mixins/shapes';
 
@@ -90,7 +89,7 @@ export default {
       position: relative;
       padding: 0 20px;
       height: 50px;
-      background: $violet-purple-gradient;
+      background: $dark-grey;
 
       @media (min-width: $tablet)  {
         height: 70px;
@@ -112,7 +111,7 @@ export default {
       &--mobile {
         display: flex;
         justify-content: space-around;
-        background: $violet-purple-gradient;
+        background: $dark-grey;
         padding: 20px 0 10px;
 
         @media (min-width: $desktop-small)  {

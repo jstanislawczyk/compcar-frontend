@@ -1,9 +1,10 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import Register from '@/components/Register';
 import Home from '@/views/Home';
 import NotFound from '@/views/NotFound';
+import CarSearch from '@/components/CarSearch';
 import Login from '@/components/Login';
+import Register from '@/components/Register';
 
 Vue.use(VueRouter);
 
@@ -22,6 +23,11 @@ const routes = [
     path: '/login',
     name: 'Login',
     component: Login,
+  },
+  {
+    path: '/car-search',
+    name: 'CarSearch',
+    component: CarSearch,
   },
   {
     path: '/:catchAll(.*)',
