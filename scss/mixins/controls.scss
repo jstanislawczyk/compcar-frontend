@@ -17,3 +17,12 @@
     cursor: pointer;
   }
 }
+
+@mixin button-hover-no-toggle($width: 150px, $height: 40px, $background-color: $pink, $color: $white, $hover-background-color: $dark-pink) {
+  @include button($width, $height, $background-color, $color);
+
+  &:hover {
+    background: $hover-background-color;
+    color: $color;
+  }
+}

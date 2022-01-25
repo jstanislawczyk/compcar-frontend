@@ -7,6 +7,9 @@
 
       <div class="nav__links">
         <div class="nav__button">
+          <router-link to="/car-search" class="nav__link nav__link--pink" tag="button">Search</router-link>
+        </div>
+        <div class="nav__button">
           <router-link to="/" class="nav__link nav__link--underlined">Home</router-link>
         </div>
         <div class="nav__button" v-if="!this.isAuthenticated()">
@@ -42,6 +45,9 @@
       </div>
       <div class="nav__button" v-if="this.isAuthenticated()">
         <button class="nav__link">Logout</button>
+      </div>
+      <div class="nav__button">
+        <router-link to="/car-search" class="nav__link nav__link--pink" tag="button">Search</router-link>
       </div>
     </div>
   </nav>
@@ -80,6 +86,7 @@ export default {
   @import 'scss/variables/colors';
   @import 'scss/variables/devices';
   @import 'scss/mixins/shapes';
+  @import 'scss/mixins/controls';
 
   .nav {
     &__main {
@@ -106,13 +113,16 @@ export default {
 
       @media (min-width: $desktop-small)  {
         display: flex;
+        align-items: center;
+        height: 100%;
       }
 
       &--mobile {
         display: flex;
         justify-content: space-around;
-        background: $dark-grey;
+        align-items: center;
         padding: 20px 0 10px;
+        background: $dark-grey;
 
         @media (min-width: $desktop-small)  {
           display: none;
@@ -153,6 +163,14 @@ export default {
 
         @media (min-width: $desktop-small)  {
           font-size: 22px;
+        }
+      }
+
+      &--pink {
+        @include button-hover-no-toggle(100px, 30px);
+
+        @media (min-width: $desktop-small)  {
+          @include button-hover-no-toggle(100px, 30px);
         }
       }
 
@@ -198,7 +216,7 @@ export default {
       position: absolute;
       right: 0;
       top: 50%;
-      transform: translate(-50%,-50%);
+      transform: translate(-50%, -50%);
       width: 25px;
       height: 20px;
       cursor: pointer;
@@ -216,7 +234,7 @@ export default {
       position: absolute;
       right: 0;
       top: 50%;
-      transform: translate(-50%,-50%);
+      transform: translate(-50%, -50%);
     }
   }
 </style>
