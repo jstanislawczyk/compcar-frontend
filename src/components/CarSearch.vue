@@ -35,7 +35,7 @@
         </div>
 
         <div class="results__pagination">
-          <div>1-60 of total of 6000</div>
+          <div>1-{{ pagination.pageSize }} of 6000</div>
           <div>
             <span class="pagination__token pagination__token--page-link">1</span>
             <span class="pagination__token pagination__token--page-link">2</span>
@@ -70,6 +70,9 @@ export default {
     return {
       sortOptions,
       selectedSortOption: sortOptions[0].value,
+      pagination: {
+        pageSize: 10,
+      },
       cars: [
         { id: 1, price: 10000 },
         { id: 2, price: 12000 },
@@ -111,14 +114,13 @@ export default {
       flex: 1 1 75%;
       display: flex;
       flex-direction: column;
+      padding: 0 30px;
     }
 
     .options {
       display: flex;
       justify-content: right;
       align-items: center;
-      height: 80px;
-      padding: 0 25px;
     }
 
     .sort {
@@ -127,6 +129,7 @@ export default {
       flex-direction: column;
       justify-content: center;
       align-items: flex-start;
+      margin-top: 40px;
 
       &__select {
         width: 200px;
@@ -147,20 +150,20 @@ export default {
 
       &__title {
         text-align: left;
-        margin: 20px 30px;
+        margin: 20px 0;
       }
 
       &__tiles {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
         grid-gap: 40px 30px;
-        padding: 30px 40px;
+        margin: 30px 0;
       }
 
       &__pagination {
         display: flex;
         justify-content: space-between;
-        padding: 30px 40px;
+        margin: 50px 0 30px;
       }
     }
 
@@ -199,7 +202,7 @@ export default {
       &__price {
         width: 100%;
         display: inline-block;
-        margin: 30px 0 30px;
+        margin: 30px 0;
         font-size: 20px;
         font-weight: bold;
         color: $dark-grey;
