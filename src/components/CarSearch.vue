@@ -33,6 +33,18 @@
             </div>
           </div>
         </div>
+
+        <div class="results__pagination">
+          <div>1-60 of total of 6000</div>
+          <div>
+            <span class="pagination__token pagination__token--page-link">1</span>
+            <span class="pagination__token pagination__token--page-link">2</span>
+            <span class="pagination__token pagination__token--page-link">3</span>
+            <span class="pagination__token pagination__token--page-link">4</span>
+            <span class="pagination__token">out of</span>
+            <span class="pagination__token pagination__token--page-link">100</span>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -144,6 +156,12 @@ export default {
         grid-gap: 40px 30px;
         padding: 30px 40px;
       }
+
+      &__pagination {
+        display: flex;
+        justify-content: space-between;
+        padding: 30px 40px;
+      }
     }
 
     .result-tile {
@@ -188,9 +206,22 @@ export default {
       }
 
       &__link {
-        @include button;
+        @include button(170px);
 
         margin-bottom: 15px;
+      }
+    }
+
+    .pagination {
+      &__token {
+        margin: 0 10px;
+
+        &--page-link {
+          &:hover {
+            color: $pink;
+            cursor: pointer;
+          }
+        }
       }
     }
   }
