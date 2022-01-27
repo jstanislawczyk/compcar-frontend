@@ -1,7 +1,45 @@
 <template>
   <section class="car-search">
     <div class="filters">
+      <h3 class="filters__title">Filters</h3>
 
+      <div class="filter">
+        <h4 v-on:click="toggleFilteringSection(0)" class="filter__title">
+          <span class="filter__text">Brand</span>
+          <span class="filter__arrow" v-bind:class="{ 'filter__arrow--down': !filtering.isSectionOpened[0] }">
+            <span></span>
+          </span>
+        </h4>
+        <div v-if="filtering.isSectionOpened[0]">
+          <div class="filter__option">
+            <input type="checkbox" id="1" v-model="filtering.countries" class="filter__checkbox" />
+            <label for="1" class="filter__value">Audi</label>
+          </div>
+          <div class="filter__option">
+            <input type="checkbox" id="2" v-model="filtering.countries" class="filter__checkbox" />
+            <label for="2" class="filter__value">BMW</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="filter">
+        <h4 v-on:click="toggleFilteringSection(1)" class="filter__title">
+          <span class="filter__text">Country</span>
+          <span class="filter__arrow" v-bind:class="{ 'filter__arrow--down': !filtering.isSectionOpened[1] }">
+            <span></span>
+          </span>
+        </h4>
+        <div v-if="filtering.isSectionOpened[1]">
+          <div class="filter__option">
+            <input type="checkbox" id="3" v-model="filtering.countries" class="filter__checkbox" />
+            <label for="3" class="filter__value">Germany</label>
+          </div>
+          <div class="filter__option">
+            <input type="checkbox" id="4" v-model="filtering.countries" class="filter__checkbox" />
+            <label for="4" class="filter__value">France</label>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="search">
@@ -51,6 +89,7 @@
 </template>
 
 <script>
+import Vue from 'vue';
 import { formatPrice } from '@/common/currency';
 
 export default {
@@ -70,6 +109,12 @@ export default {
     return {
       sortOptions,
       selectedSortOption: sortOptions[0].value,
+      filtering: {
+        countries: [],
+        isSectionOpened: [
+          true, true,
+        ],
+      },
       pagination: {
         pageSize: 10,
       },
@@ -84,6 +129,9 @@ export default {
   },
   methods: {
     formatPrice,
+    toggleFilteringSection(sectionIndex) {
+      Vue.set(this.filtering.isSectionOpened, sectionIndex, !this.filtering.isSectionOpened[sectionIndex]);
+    },
   },
 };
 </script>
@@ -92,12 +140,14 @@ export default {
   @import 'scss/variables/colors';
   @import 'scss/variables/devices';
   @import 'scss/mixins/controls';
+  @import 'scss/mixins/shapes';
 
   .car-search {
     display: flex;
 
     .filters {
       width: 100vw;
+      padding: 0 20px;
       position: absolute;
       left: -50%;
       border-right: 1px solid $dark-grey;
@@ -107,6 +157,45 @@ export default {
         position: static;
         flex: 1 1 25%;
         max-width: 300px;
+      }
+
+      &__title {
+        text-align: left;
+      }
+    }
+
+    .filter {
+      &__title {
+        display: flex;
+        justify-content: space-between;
+        cursor: pointer;
+      }
+
+      &__text {
+        width: 50%;
+        text-align: left;
+      }
+
+      &__arrow {
+        @include arrow-up;
+
+        &--down {
+          @include arrow-down;
+
+          & span {
+            margin-bottom: 4px;
+          }
+        }
+      }
+
+      &__option {
+        display: flex;
+        justify-content: left;
+        padding-bottom: 10px;
+      }
+
+      &__checkbox {
+        margin-right: 20px;
       }
     }
 

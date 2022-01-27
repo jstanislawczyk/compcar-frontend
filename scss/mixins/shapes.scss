@@ -26,3 +26,34 @@
     transform: rotate(-45deg);
   }
 }
+
+@mixin arrow-down($size: 25px, $border-size: 2px) {
+  @include arrow;
+
+  & span {
+    transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+  }
+}
+
+@mixin arrow-up($size: 25px, $border-size: 2px) {
+  @include arrow;
+
+  & span {
+    transform: rotate(-135deg);
+    -webkit-transform: rotate(-135deg);
+  }
+}
+
+@mixin arrow($size: 25px, $border-size: 2px) {
+  display: block;
+  width: $size;
+  height: $size;
+
+  & span {
+    border: solid black;
+    border-width: 0 $border-size $border-size 0;
+    display: inline-block;
+    padding: 5px;
+  }
+}
