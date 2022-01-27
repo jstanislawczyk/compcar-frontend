@@ -1,6 +1,6 @@
 <template>
   <section class="car-search">
-    <div class="filters">
+    <div class="filters" v-bind:class="{ 'filters--opened': filtering.isMobilePanelOpened }">
       <h3 class="filters__title">Filters</h3>
 
       <div class="filter">
@@ -42,8 +42,10 @@
       </div>
     </div>
 
-    <div class="search">
+    <div class="search" v-bind:class="{ 'search--hidden': filtering.isMobilePanelOpened }">
       <div class="options">
+        <button v-on:click="toggleMobileFilterPanel()" class="options__filter-open-button">Filters</button>
+
         <div class="sort">
           <label for="select-sort" class="sort__label">
             Sorting
@@ -114,6 +116,7 @@ export default {
         isSectionOpened: [
           true, true,
         ],
+        isMobilePanelOpened: false,
       },
       pagination: {
         pageSize: 10,
@@ -132,6 +135,9 @@ export default {
     toggleFilteringSection(sectionIndex) {
       Vue.set(this.filtering.isSectionOpened, sectionIndex, !this.filtering.isSectionOpened[sectionIndex]);
     },
+    toggleMobileFilterPanel() {
+      this.filtering.isMobilePanelOpened = !this.filtering.isMobilePanelOpened;
+    },
   },
 };
 </script>
@@ -147,9 +153,12 @@ export default {
 
     .filters {
       width: 100vw;
+      height: 100vh;
       padding: 0 20px;
-      position: absolute;
-      left: -50%;
+      position: fixed;
+      left: -100%;
+      top: 0;
+      box-sizing: border-box;
       border-right: 1px solid $dark-grey;
       background: $concrete-grey;
 
@@ -157,6 +166,10 @@ export default {
         position: static;
         flex: 1 1 25%;
         max-width: 300px;
+      }
+
+      &--opened {
+        left: 0;
       }
 
       &__title {
@@ -204,12 +217,40 @@ export default {
       display: flex;
       flex-direction: column;
       padding: 0 30px;
+
+      @media (min-width: $desktop-small) {
+        height: auto;
+        overflow: auto;
+      }
+
+      &--hidden {
+        height: calc(100vh - 50px);
+        overflow: hidden;
+
+        @media (min-width: $desktop-small) {
+          height: auto;
+          overflow: auto;
+        }
+      }
     }
 
     .options {
       display: flex;
-      justify-content: right;
-      align-items: center;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin: 40px 0 10px;
+
+      &__filter-open-button {
+        @include button(90px, 35px);
+
+        @media (min-width: $desktop-small) {
+          display: none;
+        }
+      }
+
+      @media (min-width: $desktop-small) {
+        justify-content: right;
+      }
     }
 
     .sort {
@@ -218,15 +259,18 @@ export default {
       flex-direction: column;
       justify-content: center;
       align-items: flex-start;
-      margin-top: 40px;
 
       &__select {
-        width: 200px;
+        width: 150px;
         height: 35px;
         margin-top: 5px;
         border: 2px solid $black;
         background: $white;
         font-size: 15px;
+
+        @media (min-width: $desktop-small) {
+          width: 200px;
+        }
       }
 
       &__label {
