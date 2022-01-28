@@ -1,45 +1,50 @@
 <template>
   <section class="car-search">
     <div class="filters" v-bind:class="{ 'filters--opened': filtering.isMobilePanelOpened }">
-      <h3 class="filters__title">Filters</h3>
+      <div class="filters__wrapper">
+        <h3 class="filters__title">Filters</h3>
+        <button v-on:click="toggleMobileFilterPanel()" class="filters__close"></button>
 
-      <div class="filter">
-        <h4 v-on:click="toggleFilteringSection(0)" class="filter__title">
-          <span class="filter__text">Brand</span>
-          <span class="filter__arrow" v-bind:class="{ 'filter__arrow--down': !filtering.isSectionOpened[0] }">
+        <div class="filter">
+          <h4 v-on:click="toggleFilteringSection(0)" class="filter__title">
+            <span class="filter__text">Brand</span>
+            <span class="filter__arrow" v-bind:class="{ 'filter__arrow--down': !filtering.isSectionOpened[0] }">
             <span></span>
           </span>
-        </h4>
-        <div v-if="filtering.isSectionOpened[0]">
-          <div class="filter__option">
-            <input type="checkbox" id="1" v-model="filtering.countries" class="filter__checkbox" />
-            <label for="1" class="filter__value">Audi</label>
+          </h4>
+          <div v-if="filtering.isSectionOpened[0]">
+            <div class="filter__option">
+              <input type="checkbox" id="1" value="Audi" v-model="filtering.countries" class="filter__checkbox" />
+              <label for="1" class="filter__label">Audi</label>
+            </div>
+            <div class="filter__option">
+              <input type="checkbox" id="2" value="BMW" v-model="filtering.countries" class="filter__checkbox" />
+              <label for="2" class="filter__label">BMW</label>
+            </div>
           </div>
-          <div class="filter__option">
-            <input type="checkbox" id="2" v-model="filtering.countries" class="filter__checkbox" />
-            <label for="2" class="filter__value">BMW</label>
+        </div>
+
+        <div class="filter">
+          <h4 v-on:click="toggleFilteringSection(1)" class="filter__title">
+            <span class="filter__text">Country</span>
+            <span class="filter__arrow" v-bind:class="{ 'filter__arrow--down': !filtering.isSectionOpened[1] }">
+            <span></span>
+          </span>
+          </h4>
+          <div v-if="filtering.isSectionOpened[1]">
+            <div class="filter__option">
+              <input type="checkbox" id="3" value="Germany" v-model="filtering.countries" class="filter__checkbox" />
+              <label for="3" class="filter__label">Germany</label>
+            </div>
+            <div class="filter__option">
+              <input type="checkbox" id="4" value="France" v-model="filtering.countries" class="filter__checkbox" />
+              <label for="4" class="filter__label">France</label>
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="filter">
-        <h4 v-on:click="toggleFilteringSection(1)" class="filter__title">
-          <span class="filter__text">Country</span>
-          <span class="filter__arrow" v-bind:class="{ 'filter__arrow--down': !filtering.isSectionOpened[1] }">
-            <span></span>
-          </span>
-        </h4>
-        <div v-if="filtering.isSectionOpened[1]">
-          <div class="filter__option">
-            <input type="checkbox" id="3" v-model="filtering.countries" class="filter__checkbox" />
-            <label for="3" class="filter__value">Germany</label>
-          </div>
-          <div class="filter__option">
-            <input type="checkbox" id="4" v-model="filtering.countries" class="filter__checkbox" />
-            <label for="4" class="filter__value">France</label>
-          </div>
-        </div>
-      </div>
+      <button v-on:click="toggleMobileFilterPanel()" class="filters__apply">Apply filters</button>
     </div>
 
     <div class="search" v-bind:class="{ 'search--hidden': filtering.isMobilePanelOpened }">
@@ -152,6 +157,10 @@ export default {
     display: flex;
 
     .filters {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
       width: 100vw;
       height: 100vh;
       padding: 0 20px;
@@ -163,8 +172,9 @@ export default {
       background: $concrete-grey;
 
       @media (min-width: $desktop-small) {
-        position: static;
         flex: 1 1 25%;
+        height: auto;
+        position: static;
         max-width: 300px;
       }
 
@@ -172,8 +182,40 @@ export default {
         left: 0;
       }
 
+      &__close {
+        @include cross(25px, 25px, $black);
+
+        position: absolute;
+        top: 30px;
+        right: 20px;
+        padding: 0;
+        border: none;
+        background: none;
+
+        @media (min-width: $desktop-small) {
+          display: none;
+        }
+      }
+
+      &__wrapper {
+        width: 100%;
+        overflow: auto;
+      }
+
       &__title {
+        margin: 30px 0;
         text-align: left;
+        font-size: 22px;
+      }
+
+      &__apply {
+        @include button(90%, 50px);
+
+        margin: 30px 0 20px;
+
+        @media (min-width: $desktop-small) {
+          display: none;
+        }
       }
     }
 
@@ -209,6 +251,11 @@ export default {
 
       &__checkbox {
         margin-right: 20px;
+      }
+
+      &__label {
+        width: 100%;
+        text-align: left;
       }
     }
 
