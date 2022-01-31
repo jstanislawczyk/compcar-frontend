@@ -6,18 +6,11 @@
       </div>
 
       <div class="nav__links">
-        <div class="nav__button">
-          <router-link to="/" class="nav__link nav__link--underlined">Home</router-link>
-        </div>
-        <div class="nav__button" v-if="!this.isAuthenticated()">
-          <router-link to="/register" class="nav__link nav__link--underlined">Register</router-link>
-        </div>
-        <div class="nav__button" v-if="!this.isAuthenticated()">
-          <router-link to="/login" class="nav__link nav__link--underlined">Login</router-link>
-        </div>
-        <div class="nav__button" v-if="this.isAuthenticated()">
-          <button class="nav__link nav__link--underlined" v-on:click="logoutUser()">Logout</button>
-        </div>
+        <router-link to="/car-search" class="nav__link nav__link--pink" tag="button">Search</router-link>
+        <router-link to="/" class="nav__link nav__link--underlined">Home</router-link>
+        <router-link v-if="!this.isAuthenticated()" to="/register" class="nav__link nav__link--underlined">Register</router-link>
+        <router-link v-if="!this.isAuthenticated()" to="/login" class="nav__link nav__link--underlined">Login</router-link>
+        <button v-if="this.isAuthenticated()" class="nav__link nav__link--underlined" v-on:click="logoutUser()">Logout</button>
       </div>
 
       <div v-on:click="toggleMobileMenu" class="nav__toggle nav__toggle--mobile">
@@ -31,18 +24,11 @@
     </div>
 
     <div v-if="!isMobileMenuClosed" class="nav__links nav__links--mobile">
-      <div class="nav__button">
-        <router-link to="/" class="nav__link">Home</router-link>
-      </div>
-      <div class="nav__button" v-if="!this.isAuthenticated()">
-        <router-link to="/register" class="nav__link">Register</router-link>
-      </div>
-      <div class="nav__button" v-if="!this.isAuthenticated()">
-        <router-link to="/login" class="nav__link">Login</router-link>
-      </div>
-      <div class="nav__button" v-if="this.isAuthenticated()">
-        <button class="nav__link">Logout</button>
-      </div>
+      <router-link to="/" class="nav__link">Home</router-link>
+      <router-link v-if="!this.isAuthenticated()" to="/register" class="nav__link">Register</router-link>
+      <router-link v-if="!this.isAuthenticated()" to="/login" class="nav__link">Login</router-link>
+      <button v-if="this.isAuthenticated()" class="nav__link">Logout</button>
+      <router-link to="/car-search" class="nav__link nav__link--pink" tag="button">Search</router-link>
     </div>
   </nav>
 </template>
@@ -78,9 +64,9 @@ export default {
 
 <style scoped lang="scss">
   @import 'scss/variables/colors';
-  @import 'scss/variables/gradients';
   @import 'scss/variables/devices';
   @import 'scss/mixins/shapes';
+  @import 'scss/mixins/controls';
 
   .nav {
     &__main {
@@ -90,7 +76,7 @@ export default {
       position: relative;
       padding: 0 20px;
       height: 50px;
-      background: $violet-purple-gradient;
+      background: $dark-grey;
 
       @media (min-width: $tablet)  {
         height: 70px;
@@ -107,13 +93,17 @@ export default {
 
       @media (min-width: $desktop-small)  {
         display: flex;
+        align-items: center;
+        height: 100%;
       }
 
       &--mobile {
         display: flex;
         justify-content: space-around;
-        background: $violet-purple-gradient;
+        align-items: center;
+        flex-wrap: wrap;
         padding: 20px 0 10px;
+        background: $dark-grey;
 
         @media (min-width: $desktop-small)  {
           display: none;
@@ -145,6 +135,12 @@ export default {
       text-decoration: none;
       cursor: pointer;
 
+      @media (min-width: $desktop-small)  {
+        &:not(:last-child) {
+          margin-right: 30px;
+        }
+      }
+
       &--logo {
         font-size: 22px;
 
@@ -155,6 +151,10 @@ export default {
         @media (min-width: $desktop-small)  {
           font-size: 22px;
         }
+      }
+
+      &--pink {
+        @include button-hover-no-toggle(100px, 30px);
       }
 
       &--underlined {
@@ -184,14 +184,6 @@ export default {
       }
     }
 
-    &__button {
-      @media (min-width: $desktop-small)  {
-        &:not(:last-child) {
-          margin-right: 30px;
-        }
-      }
-    }
-
     &__hamburger {
       display: flex;
       flex-direction: column;
@@ -199,7 +191,7 @@ export default {
       position: absolute;
       right: 0;
       top: 50%;
-      transform: translate(-50%,-50%);
+      transform: translate(-50%, -50%);
       width: 25px;
       height: 20px;
       cursor: pointer;
@@ -217,7 +209,7 @@ export default {
       position: absolute;
       right: 0;
       top: 50%;
-      transform: translate(-50%,-50%);
+      transform: translate(-50%, -50%);
     }
   }
 </style>
