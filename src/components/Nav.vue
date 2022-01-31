@@ -76,7 +76,7 @@ export default {
       position: relative;
       padding: 0 20px;
       height: 50px;
-      background: $dark-grey;
+      background: $dark-gray;
 
       @media (min-width: $tablet)  {
         height: 70px;
@@ -103,7 +103,7 @@ export default {
         align-items: center;
         flex-wrap: wrap;
         padding: 20px 0 10px;
-        background: $dark-grey;
+        background: $dark-gray;
 
         @media (min-width: $desktop-small)  {
           display: none;
