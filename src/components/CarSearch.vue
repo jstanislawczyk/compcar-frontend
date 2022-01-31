@@ -263,7 +263,15 @@ export default {
       flex: 1 1 75%;
       display: flex;
       flex-direction: column;
-      padding: 0 30px;
+      padding: 0 10px;
+
+      @media (min-width: $mobile-small) {
+        padding: 0 15px;
+      }
+
+      @media (min-width: $mobile-big) {
+        padding: 0 30px;
+      }
 
       @media (min-width: $desktop-small) {
         height: auto;
