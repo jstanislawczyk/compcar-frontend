@@ -168,8 +168,8 @@ export default {
       left: -100%;
       top: 0;
       box-sizing: border-box;
-      border-right: 1px solid $dark-grey;
-      background: $concrete-grey;
+      border-right: 1px solid $dark-gray;
+      background: $concrete-gray;
 
       @media (min-width: $desktop-small) {
         flex: 1 1 25%;
@@ -354,7 +354,7 @@ export default {
 
       &__info {
         padding: 0 15px;
-        border: 2px solid $light-grey;
+        border: 2px solid $light-gray;
         border-top: none;
         border-radius: 0 0 3px 3px;
       }
@@ -372,11 +372,11 @@ export default {
         display: inline-block;
         width: 95%;
         padding: 20px 0;
-        border: 1px solid $light-grey;
+        border: 1px solid $light-gray;
         border-right: none;
         border-left: none;
         font-size: 15px;
-        color: $grey;
+        color: $gray;
       }
 
       &__price {
@@ -385,7 +385,7 @@ export default {
         margin: 30px 0;
         font-size: 20px;
         font-weight: bold;
-        color: $dark-grey;
+        color: $dark-gray;
       }
 
       &__link {
