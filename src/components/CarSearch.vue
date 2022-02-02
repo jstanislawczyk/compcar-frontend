@@ -181,16 +181,21 @@ export default {
       return {
         query: gql`
           {
-            getCarsWithCount {
+            getCarsWithCount (
+              pagination: {
+                pageNumber: ${this.pagination.currentPage},
+                pageSize: ${this.pagination.pageSize},
+              },
+            ) {
               cars {
-                  id,
+                id,
+                name,
+                description,
+                generation {
                   name,
-                  description,
-                  generation {
-                      name,
-                      startYear,
-                      endYear,
-                  },
+                  startYear,
+                  endYear,
+                },
               },
               count,
             }
