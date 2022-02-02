@@ -64,15 +64,15 @@
         </div>
       </div>
       <div class="results">
-        <h2 class="results__title">Results found (14375)</h2>
+        <h2 class="results__title">Results found ({{ pagination.totalCount }})</h2>
 
         <div class="results__tiles">
           <div v-for="car in cars" :key="car.id" class="result-tile">
             <img class="result-tile__image" src="https://cdn.pixabay.com/photo/2013/07/12/17/47/test-pattern-152459_960_720.png" alt="Car photo" />
             <div class="result-tile__info">
-              <span class="result-tile__name">Audi A4B6</span>
-              <span class="result-tile__details">Niemcy, Benzyna, korbotronik, 2001-2003, testujemy więcej tekstu, niemiec płakał jak sprzedawał</span>
-              <span class="result-tile__price">{{ formatPrice(car.price) }}zł</span>
+              <span class="result-tile__name">{{ car.name }}</span>
+              <span class="result-tile__details">{{ car.description }}</span>
+              <span class="result-tile__price">{{ formatPrice(10000) }}zł</span>
 
               <router-link :to="`/car/${car.id}`" class="result-tile__link" tag="button">More details</router-link>
             </div>
@@ -80,14 +80,32 @@
         </div>
 
         <div class="results__pagination">
-          <div>1-{{ pagination.pageSize }} of 6000</div>
+          <div>{{ buildPaginationInfo() }}</div>
           <div>
-            <span class="pagination__token pagination__token--page-link">1</span>
-            <span class="pagination__token pagination__token--page-link">2</span>
-            <span class="pagination__token pagination__token--page-link">3</span>
-            <span class="pagination__token pagination__token--page-link">4</span>
+            <span
+              v-if="this.pagination.shouldForceVisibilityOfFirstPageNumber"
+              v-on:click="setCurrentPageNumber(1)"
+              class="pagination__token pagination__token--page-link"
+              v-bind:class="{ 'pagination__token--active': pagination.currentPage === 1 }"
+            >
+              1
+            </span>
+            <span v-if="this.pagination.shouldForceVisibilityOfFirstPageNumber" class="pagination__token">...</span>
+            <span
+              v-for="pageNumber in getPaginatedPages(
+                this.pagination.totalCount,
+                this.pagination.currentPage,
+                this.pagination.pageSize,
+                this.pagination.maxPagesToDisplay,
+              )"
+              :key="pageNumber" v-on:click="setCurrentPageNumber(pageNumber)"
+              class="pagination__token pagination__token--page-link"
+              v-bind:class="{ 'pagination__token--active': pagination.currentPage === pageNumber }"
+            >
+              {{ pageNumber }}
+            </span>
             <span class="pagination__token">out of</span>
-            <span class="pagination__token pagination__token--page-link">100</span>
+            <span v-on:click="setCurrentPageNumber(getTotalPagesNumber())" class="pagination__token pagination__token--page-link">{{ getTotalPagesNumber() }}</span>
           </div>
         </div>
       </div>
@@ -98,6 +116,9 @@
 <script>
 import Vue from 'vue';
 import { formatPrice } from '@/common/currency';
+import { createArrayInRange } from '@/common/array';
+import { parseGraphQlErrorMessage } from '@/common/errors';
+import gql from 'graphql-tag';
 
 export default {
   name: 'CarSearch',
@@ -125,15 +146,16 @@ export default {
       },
       pagination: {
         pageSize: 10,
+        totalCount: 1,
+        currentPage: 1,
+        maxPagesToDisplay: 5,
+        shouldForceVisibilityOfFirstPageNumber: false,
       },
-      cars: [
-        { id: 1, price: 10000 },
-        { id: 2, price: 12000 },
-        { id: 3, price: 13000 },
-        { id: 4, price: 14000 },
-        { id: 5, price: 15000 },
-      ],
+      cars: [],
     };
+  },
+  async created() {
+    await this.getCars();
   },
   methods: {
     formatPrice,
@@ -142,6 +164,100 @@ export default {
     },
     toggleMobileFilterPanel() {
       this.filtering.isMobilePanelOpened = !this.filtering.isMobilePanelOpened;
+    },
+    async getCars() {
+      try {
+        const getCarsQuery = this.getCarsQuery();
+        const carsWithCount = await this.$apollo.query(getCarsQuery);
+
+        this.cars = carsWithCount.data.getCarsWithCount.cars;
+        this.pagination.totalCount = carsWithCount.data.getCarsWithCount.count;
+      } catch (error) {
+        const parsedError = parseGraphQlErrorMessage(error);
+        console.log(parsedError);
+      }
+    },
+    getCarsQuery() {
+      return {
+        query: gql`
+          {
+            getCarsWithCount {
+              cars {
+                  id,
+                  name,
+                  description,
+                  generation {
+                      name,
+                      startYear,
+                      endYear,
+                  },
+              },
+              count,
+            }
+          }
+        `,
+      };
+    },
+    buildPaginationInfo() {
+      const initialElementNumber = 1 + (this.pagination.pageSize * (this.pagination.currentPage - 1));
+      const visibleElementsNumber = this.pagination.totalCount < this.pagination.pageSize
+        ? this.pagination.totalCount
+        : this.pagination.pageSize * this.pagination.currentPage;
+
+      return `${initialElementNumber}-${visibleElementsNumber} of ${this.pagination.totalCount}`;
+    },
+    getPaginatedPages(
+      totalItems,
+      currentPage,
+      pageSize = 10,
+      maxPagesToDisplay = 5,
+    ) {
+      const totalPagesNumber = this.getTotalPagesNumber();
+      const shouldDisplayStartingPages = totalPagesNumber <= maxPagesToDisplay;
+      let startPage, endPage;
+
+      this.setCurrentPageToBeInRange(totalPagesNumber, currentPage);
+
+      if (shouldDisplayStartingPages) {
+        startPage = 1;
+        endPage = totalPagesNumber;
+      } else {
+        const maxPagesBeforeCurrentPage = Math.floor(maxPagesToDisplay / 2);
+        const maxPagesAfterCurrentPage = Math.ceil(maxPagesToDisplay / 2) - 1;
+
+        if (currentPage <= maxPagesBeforeCurrentPage) {
+          startPage = 1;
+          endPage = maxPagesToDisplay;
+        } else if (currentPage + maxPagesAfterCurrentPage >= totalPagesNumber) {
+          startPage = totalPagesNumber - maxPagesToDisplay + 1;
+          endPage = totalPagesNumber;
+        } else {
+          startPage = currentPage - maxPagesBeforeCurrentPage;
+          endPage = currentPage + maxPagesAfterCurrentPage;
+        }
+      }
+
+      const isFirstPageNumberNotVisible = currentPage >= (maxPagesToDisplay / 2) + 1;
+      this.pagination.shouldForceVisibilityOfFirstPageNumber = isFirstPageNumberNotVisible && totalPagesNumber > maxPagesToDisplay;
+
+      return createArrayInRange(startPage, endPage);
+    },
+    setCurrentPageToBeInRange(currentPage, totalPagesNumber) {
+      if (currentPage < 1) {
+        currentPage = 1;
+      }
+
+      if (currentPage > totalPagesNumber) {
+        currentPage = totalPagesNumber;
+      }
+
+      return currentPage;
+    },
+    setCurrentPageNumber(newPageNumber) {
+      this.pagination.currentPage = newPageNumber;
+    },
+    getTotalPagesNumber() {
+      return Math.ceil(this.pagination.totalCount / this.pagination.pageSize);
     },
   },
 };
@@ -155,6 +271,7 @@ export default {
 
   .car-search {
     display: flex;
+    min-height: calc(100vh - 50px);
 
     .filters {
       display: flex;
@@ -412,6 +529,10 @@ export default {
             color: $pink;
             cursor: pointer;
           }
+        }
+
+        &--active {
+          color: $pink;
         }
       }
     }
