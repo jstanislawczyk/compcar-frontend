@@ -67,14 +67,21 @@
         <h2 class="results__title">Results found ({{ pagination.totalCount }})</h2>
 
         <div class="results__tiles">
-          <div v-for="car in cars" :key="car.id" class="result-tile">
+          <div v-for="model in models" :key="model.id" class="result-tile">
             <img class="result-tile__image" src="https://cdn.pixabay.com/photo/2013/07/12/17/47/test-pattern-152459_960_720.png" alt="Car photo" />
             <div class="result-tile__info">
-              <span class="result-tile__name">{{ car.name }}</span>
-              <span class="result-tile__details">{{ car.description }}</span>
-              <span class="result-tile__price">{{ formatPrice(10000) }}zł</span>
+              <span class="result-tile__name">{{ model.brand.name }} {{ model.name }}</span>
+              <div class="result-tile__details">
+                <span class="result-tile__description">
+                  {{ model.description }}
+                </span>
+                <span class="result-tile__generations">
+                  Available generations: {{ getAvailableGenerationsNames(model.generations)}}
+                </span>
+              </div>
+              <span class="result-tile__price">{{ formatPrice(getCheapestCarPrice(model.generations)) }}zł</span>
 
-              <router-link :to="`/car/${car.id}`" class="result-tile__link" tag="button">More details</router-link>
+              <router-link :to="`/car/${model.id}`" class="result-tile__link" tag="button">More details</router-link>
             </div>
           </div>
         </div>
@@ -151,11 +158,11 @@ export default {
         maxPagesToDisplay: 5,
         shouldForceVisibilityOfFirstPageNumber: false,
       },
-      cars: [],
+      models: [],
     };
   },
   async created() {
-    await this.getCars();
+    await this.getModels();
   },
   methods: {
     formatPrice,
@@ -165,36 +172,45 @@ export default {
     toggleMobileFilterPanel() {
       this.filtering.isMobilePanelOpened = !this.filtering.isMobilePanelOpened;
     },
-    async getCars() {
+    async getModels() {
       try {
-        const getCarsQuery = this.getCarsQuery();
-        const carsWithCount = await this.$apollo.query(getCarsQuery);
+        const getModelsQuery = this.getModelsQuery();
+        const modelsWithCountResponse = await this.$apollo.query(getModelsQuery);
+        const modelsWithCount = modelsWithCountResponse.data.getModelsWithCount;
 
-        this.cars = carsWithCount.data.getCarsWithCount.cars;
-        this.pagination.totalCount = carsWithCount.data.getCarsWithCount.count;
+        this.models = modelsWithCount.models;
+        this.pagination.totalCount = modelsWithCount.count;
       } catch (error) {
         const parsedError = parseGraphQlErrorMessage(error);
         console.log(parsedError);
       }
     },
-    getCarsQuery() {
+    getModelsQuery() {
       return {
         query: gql`
           {
-            getCarsWithCount (
+            getModelsWithCount (
               pagination: {
                 pageNumber: ${this.pagination.currentPage},
                 pageSize: ${this.pagination.pageSize},
               },
             ) {
-              cars {
+              models {
                 id,
                 name,
                 description,
-                generation {
+                brand {
                   name,
-                  startYear,
-                  endYear,
+                },
+                generations {
+                  id,
+                  name,
+                  cars {
+                    id,
+                    name,
+                    basePrice,
+                    isAvailable,
+                  },
                 },
               },
               count,
@@ -202,6 +218,24 @@ export default {
           }
         `,
       };
+    },
+    getAvailableGenerationsNames(generations) {
+      return generations
+        .filter((generation) => this.hasAvailableCar(generation.cars))
+        .map((generation) => generation.name)
+        .join(', ');
+    },
+    hasAvailableCar(cars) {
+      return cars.some((car) => car.isAvailable);
+    },
+    getCheapestCarPrice(generations) {
+      const basePrices = generations
+        .map((generation) => generation.cars)
+        .flat()
+        .filter((car) => car.isAvailable)
+        .map((car) => car.basePrice);
+
+      return Math.min(...basePrices);
     },
     buildPaginationInfo() {
       const initialElementNumber = 1 + (this.pagination.pageSize * (this.pagination.currentPage - 1));
@@ -468,6 +502,10 @@ export default {
         grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
         grid-gap: 40px 30px;
         margin: 30px 0;
+
+        @media (min-width: $desktop-small) {
+          grid-template-columns: repeat(auto-fit, minmax(300px, .33fr));
+        }
       }
 
       &__pagination {
@@ -505,8 +543,14 @@ export default {
         border: 1px solid $light-gray;
         border-right: none;
         border-left: none;
+        text-align: left;
         font-size: 15px;
         color: $gray;
+      }
+
+      &__description {
+        display: block;
+        margin-bottom: 30px;
       }
 
       &__price {
