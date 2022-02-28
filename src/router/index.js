@@ -3,6 +3,7 @@ import VueRouter from 'vue-router';
 import Home from '@/views/Home';
 import NotFound from '@/views/NotFound';
 import ModelsSearch from '@/components/ModelsSearch';
+import Model from '@/components/Model';
 import Login from '@/components/Login';
 import Register from '@/components/Register';
 
@@ -28,7 +29,12 @@ const routes = [
     path: '/models-search',
     name: 'ModelsSearch',
     component: ModelsSearch,
-  }
+  },
+  {
+    path: '/model/:id',
+    name: 'Model',
+    component: Model,
+  },
   {
     path: '/:catchAll(.*)',
     component: NotFound,
