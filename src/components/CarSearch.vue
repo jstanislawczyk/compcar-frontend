@@ -81,7 +81,7 @@
               </div>
               <span class="result-tile__price">{{ formatPrice(getCheapestCarPrice(model.generations)) }}zł</span>
 
-              <router-link :to="`/car/${model.id}`" class="result-tile__link" tag="button">More details</router-link>
+              <router-link :to="`/model/${model.id}`" class="result-tile__link" tag="button">More details</router-link>
             </div>
           </div>
         </div>
@@ -221,18 +221,21 @@ export default {
     },
     getAvailableGenerationsNames(generations) {
       return generations
-        .filter((generation) => this.hasAvailableCar(generation.cars))
+        // TODO implement after isAvailable full support
+        // .filter((generation) => this.hasAvailableCar(generation.cars))
         .map((generation) => generation.name)
         .join(', ');
     },
-    hasAvailableCar(cars) {
-      return cars.some((car) => car.isAvailable);
-    },
+    // TODO implement after isAvailable full support
+    // hasAvailableCar(cars) {
+    //   return cars.some((car) => car.isAvailable);
+    // },
     getCheapestCarPrice(generations) {
       const basePrices = generations
         .map((generation) => generation.cars)
         .flat()
-        .filter((car) => car.isAvailable)
+        // TODO implement after isAvailable full support
+        // .filter((car) => car.isAvailable)
         .map((car) => car.basePrice);
 
       return Math.min(...basePrices);
