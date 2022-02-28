@@ -1,5 +1,5 @@
 <template>
-  <section class="car-search">
+  <section class="models-search">
     <div class="filters" v-bind:class="{ 'filters--opened': filtering.isMobilePanelOpened }">
       <div class="filters__wrapper">
         <h3 class="filters__title">Filters</h3>
@@ -128,7 +128,7 @@ import { parseGraphQlErrorMessage } from '@/common/errors';
 import gql from 'graphql-tag';
 
 export default {
-  name: 'CarSearch',
+  name: 'ModelsSearch',
   data() {
     const sortOptions = [
       {
@@ -311,7 +311,7 @@ export default {
   @import 'scss/mixins/controls';
   @import 'scss/mixins/shapes';
 
-  .car-search {
+  .models-search {
     display: flex;
     min-height: calc(100vh - 50px);
 
