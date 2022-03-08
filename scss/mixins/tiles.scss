@@ -53,6 +53,15 @@
     margin-bottom: 30px;
   }
 
+  &__detail {
+    display: block;
+    margin-top: 10px;
+  }
+
+  &__detail-title {
+    font-weight: 700;
+  }
+
   &__price {
     width: 100%;
     display: inline-block;
