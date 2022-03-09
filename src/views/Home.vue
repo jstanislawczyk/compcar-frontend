@@ -12,7 +12,7 @@
         </p>
       </div>
 
-      <router-link to="/car-search" class="about__button" tag="button">Search</router-link>
+      <router-link to="/models-search" class="about__button" tag="button">Search</router-link>
     </div>
     <div class="features">
       <h2 class="features__title">Customize your requirements</h2>

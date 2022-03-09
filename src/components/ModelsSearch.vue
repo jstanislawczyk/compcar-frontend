@@ -1,5 +1,5 @@
 <template>
-  <section class="car-search">
+  <section class="models-search">
     <div class="filters" v-bind:class="{ 'filters--opened': filtering.isMobilePanelOpened }">
       <div class="filters__wrapper">
         <h3 class="filters__title">Filters</h3>
@@ -128,7 +128,7 @@ import { parseGraphQlErrorMessage } from '@/common/errors';
 import gql from 'graphql-tag';
 
 export default {
-  name: 'CarSearch',
+  name: 'ModelsSearch',
   data() {
     const sortOptions = [
       {
@@ -310,8 +310,9 @@ export default {
   @import 'scss/variables/devices';
   @import 'scss/mixins/controls';
   @import 'scss/mixins/shapes';
+  @import 'scss/mixins/tiles';
 
-  .car-search {
+  .models-search {
     display: flex;
     min-height: calc(100vh - 50px);
 
@@ -501,14 +502,7 @@ export default {
       }
 
       &__tiles {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        grid-gap: 40px 30px;
-        margin: 30px 0;
-
-        @media (min-width: $desktop-small) {
-          grid-template-columns: repeat(auto-fit, minmax(300px, .33fr));
-        }
+        @include tiles-grid;
       }
 
       &__pagination {
@@ -519,57 +513,7 @@ export default {
     }
 
     .result-tile {
-      &__image {
-        width: 100%;
-      }
-
-      &__info {
-        padding: 0 15px;
-        border: 2px solid $light-gray;
-        border-top: none;
-        border-radius: 0 0 3px 3px;
-      }
-
-      &__name {
-        display: inline-block;
-        width: 100%;
-        margin: 15px 0;
-        text-align: center;
-        font-size: 24px;
-        font-weight: bold;
-      }
-
-      &__details {
-        display: inline-block;
-        width: 95%;
-        padding: 20px 0;
-        border: 1px solid $light-gray;
-        border-right: none;
-        border-left: none;
-        text-align: left;
-        font-size: 15px;
-        color: $gray;
-      }
-
-      &__description {
-        display: block;
-        margin-bottom: 30px;
-      }
-
-      &__price {
-        width: 100%;
-        display: inline-block;
-        margin: 30px 0;
-        font-size: 20px;
-        font-weight: bold;
-        color: $dark-gray;
-      }
-
-      &__link {
-        @include button(170px);
-
-        margin-bottom: 15px;
-      }
+      @include tile;
     }
 
     .pagination {
