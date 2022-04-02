@@ -70,14 +70,14 @@ export default {
   },
   async created() {
     const modelId = this.$route.params.id;
-    await this.getModelById(modelId);
+    await this.setupModelData(modelId);
   },
   methods: {
     formatPrice,
-    async getModelById(id) {
+    async setupModelData(id) {
       try {
-        const getModelByIdQuery = this.getModelByIdQuery(id);
-        const modelResponse = await this.$apollo.query(getModelByIdQuery);
+        const modelByIdQuery = this.getModelByIdQuery(id);
+        const modelResponse = await this.$apollo.query(modelByIdQuery);
         const model = modelResponse.data.getModelById;
 
         this.model = {
@@ -150,9 +150,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  @import 'scss/variables/colors';
   @import 'scss/variables/devices';
-  @import 'scss/mixins/controls';
   @import 'scss/mixins/tiles';
 
   .model {
