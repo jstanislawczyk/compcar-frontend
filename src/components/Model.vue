@@ -16,7 +16,7 @@
                 <span class="generation__detail-title">Available body styles:</span> {{ getBodyStyles(generation.cars) }}
               </span>
               <span class="generation__detail">
-                <span class="generation__detail-title">Production date:</span> {{ buildProductionDateInformation(generation.startYear, generation.endYear) }}
+                <span class="generation__detail-title">Production date:</span> {{ buildGeneralProductionDateInformation(generation.cars) }}
               </span>
             </div>
             <span class="generation__price">{{ formatPrice(getCheapestCarPrice(generation.cars)) }}zł</span>
@@ -38,10 +38,10 @@
                 <span class="generation__detail-title">Available body styles:</span> {{ getBodyStyles(generation.cars) }}
               </span>
               <span class="generation__detail">
-                <span class="generation__detail-title">Production date:</span> {{ generation.startYear }} - {{ generation.endYear || 'still produced' }}
+                <span class="generation__detail-title">Production date:</span> {{ buildGeneralProductionDateInformation(generation.cars) }}
               </span>
             </div>
-            <span class="generation__price">{{getCheapestCarPrice(generation.cars)}}zł</span>
+            <span class="generation__price">{{ formatPrice(getCheapestCarPrice(generation.cars)) }}zł</span>
 
             <router-link :to="`/generation/${generation.id}`" class="generation__link" tag="button">Check cars</router-link>
           </div>
@@ -54,7 +54,7 @@
 <script>
 import { formatPrice } from '@/common/currency';
 import { parseGraphQlErrorMessage } from '@/common/errors';
-import { buildProductionDateInformation } from '@/common/generation';
+import { buildGeneralProductionDateInformation } from '@/common/car';
 import gql from 'graphql-tag';
 
 export default {
@@ -75,7 +75,7 @@ export default {
   },
   methods: {
     formatPrice,
-    buildProductionDateInformation,
+    buildGeneralProductionDateInformation,
     async setupModelData(id) {
       try {
         const modelByIdQuery = this.getModelByIdQuery(id);
@@ -109,13 +109,13 @@ export default {
                 id,
                 name,
                 description,
-                startYear,
-                endYear,
                 cars {
                   name,
                   basePrice,
                   isAvailable,
                   bodyStyle,
+                  startYear,
+                  endYear,
                 },
               },
             },

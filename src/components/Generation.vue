@@ -4,18 +4,26 @@
     <p>{{ generation.description }}</p>
     <p>
       <span class="generation__subtitle">Production date:</span>
-      {{ buildProductionDateInformation(generation.startYear, generation.endYear) }}
+      {{
+        buildGeneralProductionDateInformation([
+          ...cars.available,
+          ...cars.discontinued,
+        ])
+      }}
     </p>
 
     <div class="cars">
       <h3 class="cars__status">Available</h3>
-      <div class="cars__tiles">
+      <div v-if="cars.available.length > 0" class="cars__tiles">
         <div class="car" v-for="car in cars.available" :key="car.id">
           <img class="car__image" src="https://cdn.pixabay.com/photo/2013/07/12/17/47/test-pattern-152459_960_720.png" alt="Car photo" />
           <div class="car__info">
             <span class="car__name">{{ car.name }}</span>
             <div class="car__details">
               <span class="car__description">{{ car.description }}</span>
+              <span class="car__detail">
+                <span class="car__detail-title">Production date:</span> {{ buildProductionDateInformation(car.startYear, car.endYear) }}
+              </span>
               <span class="car__detail">
                 <span class="car__detail-title">Body style:</span> {{ car.bodyStyle.toLowerCase() }}
               </span>
@@ -26,15 +34,19 @@
           </div>
         </div>
       </div>
+      <p v-else>No available cars</p>
 
       <h3 class="cars__status">Discontinued</h3>
-      <div class="cars__tiles">
+      <div v-if="cars.discontinued.length > 0" class="cars__tiles">
         <div class="car" v-for="car in cars.discontinued" :key="car.id">
           <img class="car__image" src="https://cdn.pixabay.com/photo/2013/07/12/17/47/test-pattern-152459_960_720.png" alt="Car photo" />
           <div class="car__info">
             <span class="car__name">{{ car.name }}</span>
             <div class="car__details">
               <span class="car__description">{{ car.description }}</span>
+              <span class="car__detail">
+                <span class="car__detail-title">Production date:</span> {{ buildProductionDateInformation(car.startYear, car.endYear) }}
+              </span>
               <span class="car__detail">
                 <span class="car__detail-title">Body style:</span> {{ car.bodyStyle.toLowerCase() }}
               </span>
@@ -45,6 +57,7 @@
           </div>
         </div>
       </div>
+      <p v-else>No discontinued cars</p>
     </div>
   </section>
 </template>
@@ -52,7 +65,7 @@
 <script>
 import { formatPrice } from '@/common/currency';
 import { parseGraphQlErrorMessage } from '@/common/errors';
-import { buildProductionDateInformation } from '@/common/generation';
+import { buildGeneralProductionDateInformation, buildProductionDateInformation } from '@/common/car';
 import gql from 'graphql-tag';
 
 export default {
@@ -79,6 +92,7 @@ export default {
   methods: {
     formatPrice,
     buildProductionDateInformation,
+    buildGeneralProductionDateInformation,
     async setupGenerationData(id) {
       try {
         const generationByIdQuery = this.getGenerationByIdQuery(id);
@@ -116,15 +130,15 @@ export default {
               id,
               name,
               description,
-              startYear,
-              endYear,
               cars {
                 id,
                 name,
                 description,
                 basePrice,
                 isAvailable,
-                bodyStyle
+                bodyStyle,
+                startYear,
+                endYear,
               },
               model {
                 name,
