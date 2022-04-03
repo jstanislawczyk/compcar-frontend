@@ -39,7 +39,7 @@
                 <span class="car__detail-title">Body style:</span> {{ car.bodyStyle.toLowerCase() }}
               </span>
             </div>
-            <span class="car__price">{{ car.basePrice }}zł</span>
+            <span class="car__price">{{ formatPrice(car.basePrice) }}zł</span>
 
             <router-link :to="`/car/${car.id}`" class="car__link" tag="button">Check car</router-link>
           </div>
