@@ -16,7 +16,7 @@
                 <span class="generation__detail-title">Available body styles:</span> {{ getBodyStyles(generation.cars) }}
               </span>
               <span class="generation__detail">
-                <span class="generation__detail-title">Production date:</span> {{ generation.startYear }} - {{ generation.endYear || 'still produced' }}
+                <span class="generation__detail-title">Production date:</span> {{ buildProductionDateInformation(generation.startYear, generation.endYear) }}
               </span>
             </div>
             <span class="generation__price">{{getCheapestCarPrice(generation.cars)}}zł</span>
@@ -54,6 +54,7 @@
 <script>
 import { formatPrice } from '@/common/currency';
 import { parseGraphQlErrorMessage } from '@/common/errors';
+import { buildProductionDateInformation } from '@/common/generation';
 import gql from 'graphql-tag';
 
 export default {
@@ -74,6 +75,7 @@ export default {
   },
   methods: {
     formatPrice,
+    buildProductionDateInformation,
     async setupModelData(id) {
       try {
         const modelByIdQuery = this.getModelByIdQuery(id);
@@ -112,7 +114,6 @@ export default {
                 cars {
                   name,
                   basePrice,
-                  description,
                   isAvailable,
                   bodyStyle,
                 },
