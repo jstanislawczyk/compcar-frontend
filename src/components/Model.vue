@@ -16,10 +16,10 @@
                 <span class="generation__detail-title">Available body styles:</span> {{ getBodyStyles(generation.cars) }}
               </span>
               <span class="generation__detail">
-                <span class="generation__detail-title">Production date:</span> {{ generation.startYear }} - {{ generation.endYear || 'still produced' }}
+                <span class="generation__detail-title">Production date:</span> {{ buildGeneralProductionDateInformation(generation.cars) }}
               </span>
             </div>
-            <span class="generation__price">{{getCheapestCarPrice(generation.cars)}}zł</span>
+            <span class="generation__price">{{ formatPrice(getCheapestCarPrice(generation.cars)) }}zł</span>
 
             <router-link :to="`/generation/${generation.id}`" class="generation__link" tag="button">Check cars</router-link>
           </div>
@@ -38,10 +38,10 @@
                 <span class="generation__detail-title">Available body styles:</span> {{ getBodyStyles(generation.cars) }}
               </span>
               <span class="generation__detail">
-                <span class="generation__detail-title">Production date:</span> {{ generation.startYear }} - {{ generation.endYear || 'still produced' }}
+                <span class="generation__detail-title">Production date:</span> {{ buildGeneralProductionDateInformation(generation.cars) }}
               </span>
             </div>
-            <span class="generation__price">{{getCheapestCarPrice(generation.cars)}}zł</span>
+            <span class="generation__price">{{ formatPrice(getCheapestCarPrice(generation.cars)) }}zł</span>
 
             <router-link :to="`/generation/${generation.id}`" class="generation__link" tag="button">Check cars</router-link>
           </div>
@@ -54,6 +54,7 @@
 <script>
 import { formatPrice } from '@/common/currency';
 import { parseGraphQlErrorMessage } from '@/common/errors';
+import { buildGeneralProductionDateInformation } from '@/common/car';
 import gql from 'graphql-tag';
 
 export default {
@@ -70,14 +71,15 @@ export default {
   },
   async created() {
     const modelId = this.$route.params.id;
-    await this.getModelById(modelId);
+    await this.setupModelData(modelId);
   },
   methods: {
     formatPrice,
-    async getModelById(id) {
+    buildGeneralProductionDateInformation,
+    async setupModelData(id) {
       try {
-        const getModelByIdQuery = this.getModelByIdQuery(id);
-        const modelResponse = await this.$apollo.query(getModelByIdQuery);
+        const modelByIdQuery = this.getModelByIdQuery(id);
+        const modelResponse = await this.$apollo.query(modelByIdQuery);
         const model = modelResponse.data.getModelById;
 
         this.model = {
@@ -107,14 +109,12 @@ export default {
                 id,
                 name,
                 description,
-                startYear,
-                endYear,
                 cars {
                   name,
                   basePrice,
-                  description,
-                  isAvailable,
                   bodyStyle,
+                  startYear,
+                  endYear,
                 },
               },
             },
@@ -124,7 +124,7 @@ export default {
     },
     initGenerationsData(generations) {
       generations.forEach((generation) => {
-        const hasAvailableCar = generation.cars.some((car) => car.isAvailable);
+        const hasAvailableCar = generation.cars.some((car) => !car.endYear);
 
         if (hasAvailableCar) {
           this.generations.available.push(generation);
@@ -150,9 +150,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  @import 'scss/variables/colors';
   @import 'scss/variables/devices';
-  @import 'scss/mixins/controls';
   @import 'scss/mixins/tiles';
 
   .model {

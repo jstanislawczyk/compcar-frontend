@@ -209,7 +209,6 @@ export default {
                     id,
                     name,
                     basePrice,
-                    isAvailable,
                   },
                 },
               },
@@ -221,21 +220,13 @@ export default {
     },
     getAvailableGenerationsNames(generations) {
       return generations
-        // TODO implement after isAvailable full support
-        // .filter((generation) => this.hasAvailableCar(generation.cars))
         .map((generation) => generation.name)
         .join(', ');
     },
-    // TODO implement after isAvailable full support
-    // hasAvailableCar(cars) {
-    //   return cars.some((car) => car.isAvailable);
-    // },
     getCheapestCarPrice(generations) {
       const basePrices = generations
         .map((generation) => generation.cars)
         .flat()
-        // TODO implement after isAvailable full support
-        // .filter((car) => car.isAvailable)
         .map((car) => car.basePrice);
 
       return Math.min(...basePrices);

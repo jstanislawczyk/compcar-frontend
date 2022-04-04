@@ -6,6 +6,7 @@ import ModelsSearch from '@/components/ModelsSearch';
 import Model from '@/components/Model';
 import Login from '@/components/Login';
 import Register from '@/components/Register';
+import Generation from '@/components/Generation';
 
 Vue.use(VueRouter);
 
@@ -34,6 +35,11 @@ const routes = [
     path: '/model/:id',
     name: 'Model',
     component: Model,
+  },
+  {
+    path: '/generation/:id',
+    name: 'Generation',
+    component: Generation,
   },
   {
     path: '/:catchAll(.*)',
