@@ -95,8 +95,8 @@ export default {
     buildGeneralProductionDateInformation,
     async setupGenerationData(id) {
       try {
-        const generationByIdQuery = this.getGenerationByIdQuery(id);
-        const generationResponse = await this.$apollo.query(generationByIdQuery);
+        const getGenerationByIdQuery = this.getGenerationByIdQuery(id);
+        const generationResponse = await this.$apollo.query(getGenerationByIdQuery);
 
         const generation = generationResponse.data.getGenerationById;
         this.generation = {

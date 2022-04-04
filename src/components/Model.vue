@@ -78,8 +78,8 @@ export default {
     buildGeneralProductionDateInformation,
     async setupModelData(id) {
       try {
-        const modelByIdQuery = this.getModelByIdQuery(id);
-        const modelResponse = await this.$apollo.query(modelByIdQuery);
+        const getModelByIdQuery = this.getModelByIdQuery(id);
+        const modelResponse = await this.$apollo.query(getModelByIdQuery);
         const model = modelResponse.data.getModelById;
 
         this.model = {
