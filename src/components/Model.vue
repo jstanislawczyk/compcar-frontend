@@ -112,7 +112,6 @@ export default {
                 cars {
                   name,
                   basePrice,
-                  isAvailable,
                   bodyStyle,
                   startYear,
                   endYear,
@@ -125,7 +124,7 @@ export default {
     },
     initGenerationsData(generations) {
       generations.forEach((generation) => {
-        const hasAvailableCar = generation.cars.some((car) => car.isAvailable);
+        const hasAvailableCar = generation.cars.some((car) => !car.endYear);
 
         if (hasAvailableCar) {
           this.generations.available.push(generation);

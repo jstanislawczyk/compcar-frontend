@@ -116,6 +116,7 @@ export default {
         this.brand = {
           name: brand.name,
         };
+
         this.initCarsData(generation.cars);
       } catch (error) {
         const parsedError = parseGraphQlErrorMessage(error);
@@ -135,7 +136,6 @@ export default {
                 name,
                 description,
                 basePrice,
-                isAvailable,
                 bodyStyle,
                 startYear,
                 endYear,
@@ -153,7 +153,7 @@ export default {
     },
     initCarsData(cars) {
       cars.forEach((car) => {
-        if (car.isAvailable) {
+        if (!car.endYear) {
           this.cars.available.push(car);
         } else {
           this.cars.discontinued.push(car);
