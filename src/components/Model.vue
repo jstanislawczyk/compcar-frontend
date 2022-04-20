@@ -19,7 +19,7 @@
                 <span class="generation__detail-title">Production date:</span> {{ buildGeneralProductionDateInformation(generation.cars) }}
               </span>
             </div>
-            <span class="generation__price">{{ formatPrice(getCheapestCarPrice(generation.cars)) }}zł</span>
+            <span class="generation__price">{{ formatPrice(getCheapestCarPrice(generation.cars)) }}PLN</span>
 
             <router-link :to="`/generation/${generation.id}`" class="generation__link" tag="button">Check cars</router-link>
           </div>
@@ -41,7 +41,7 @@
                 <span class="generation__detail-title">Production date:</span> {{ buildGeneralProductionDateInformation(generation.cars) }}
               </span>
             </div>
-            <span class="generation__price">{{ formatPrice(getCheapestCarPrice(generation.cars)) }}zł</span>
+            <span class="generation__price">{{ formatPrice(getCheapestCarPrice(generation.cars)) }}PLN</span>
 
             <router-link :to="`/generation/${generation.id}`" class="generation__link" tag="button">Check cars</router-link>
           </div>
