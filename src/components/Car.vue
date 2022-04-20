@@ -25,9 +25,9 @@
       <p class="car__subtitle car__subtitle--spacing">Engines</p>
       <div class="car__paintings">
         <div class="table__row">
-          <div class="table__name">Name</div>
-          <div class="table__description">Fuel type</div>
-          <div class="table__price">Price (PLN)</div>
+          <div class="table__column">Name</div>
+          <div class="table__column">Fuel type</div>
+          <div class="table__column">Price (PLN)</div>
         </div>
 
         <div
@@ -36,9 +36,9 @@
           class="table__row table__row--item"
           v-bind:class="[ index % 2 === 0 ? 'table__row--even' : 'table__row--odd' ]"
         >
-          <div class="table__name">{{ engine.engine.name }}</div>
-          <div class="table__description">{{ engine.engine.fuelType }}</div>
-          <div class="table__price">{{ formatPrice(engine.price) }}</div>
+          <div class="table__column">{{ engine.engine.name }}</div>
+          <div class="table__column">{{ engine.engine.fuelType }}</div>
+          <div class="table__column">{{ formatPrice(engine.price) }}</div>
         </div>
       </div>
     </template>
@@ -47,9 +47,9 @@
       <p class="car__subtitle car__subtitle--spacing">Paintings</p>
       <div class="car__paintings">
         <div class="table__row">
-          <div class="table__name">Name</div>
-          <div class="table__color">Color</div>
-          <div class="table__price">Price (PLN)</div>
+          <div class="table__column">Name</div>
+          <div class="table__column">Color</div>
+          <div class="table__column">Price (PLN)</div>
         </div>
 
         <div
@@ -58,11 +58,11 @@
           class="table__row table__row--item"
           v-bind:class="[ index % 2 === 0 ? 'table__row--even' : 'table__row--odd' ]"
         >
-          <div class="table__name">{{ painting.color.name }}</div>
-          <div class="table__color">
+          <div class="table__column">{{ painting.color.name }}</div>
+          <div class="table__column">
             <div class="table__color-label" :style="{ 'background-color': painting.color.hexCode }"></div>
           </div>
-          <div class="table__price">{{ formatPrice(painting.price) }}</div>
+          <div class="table__column">{{ formatPrice(painting.price) }}</div>
         </div>
       </div>
     </template>
@@ -71,9 +71,9 @@
       <p class="car__subtitle car__subtitle--spacing">Available addons</p>
       <div class="car__addons">
         <div class="table__row">
-          <div class="table__name">Name</div>
-          <div class="table__description">Description</div>
-          <div class="table__price">Price (PLN)</div>
+          <div class="table__column">Name</div>
+          <div class="table__column table__column--tablet">Description</div>
+          <div class="table__column">Price (PLN)</div>
         </div>
 
         <div
@@ -82,9 +82,9 @@
           class="table__row table__row--item"
           v-bind:class="[ index % 2 === 0 ? 'table__row--even' : 'table__row--odd' ]"
         >
-          <div class="table__name">{{ addon.name }}</div>
-          <div class="table__description">{{ addon.description }}</div>
-          <div class="table__price">{{ formatPrice(addon.price) }}</div>
+          <div class="table__column">{{ addon.name }}</div>
+          <div class="table__column table__column--tablet">{{ addon.description }}</div>
+          <div class="table__column">{{ formatPrice(addon.price) }}</div>
         </div>
       </div>
     </template>
@@ -314,7 +314,6 @@ export default {
       background: #000;
       color: #FFF;
       text-align: center;
-      line-height: 50px;
 
       &--item {
         border-left: 1px solid $light-gray;
@@ -335,23 +334,17 @@ export default {
       }
     }
 
-    &__name {
+    &__column {
       flex: 1 1 0;
-    }
-
-    &__description {
-      flex: 2 1 0;
-    }
-
-    &__price {
-      flex: 1 1 0;
-    }
-
-    &__color {
-      flex: 2 1 0;
       display: flex;
       justify-content: center;
       align-items: center;
+
+      &--tablet {
+        @media (max-width: $tablet) {
+          display: none;
+        }
+      }
     }
 
     &__color-label {
