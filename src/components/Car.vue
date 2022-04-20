@@ -10,7 +10,7 @@
     </p>
     <p>
       <span class="car__subtitle">Price:</span>
-      {{ formatPrice(car.basePrice) }}zł
+      {{ formatPrice(car.basePrice) }}PLN
     </p>
     <p>
       <span class="car__subtitle">Weight:</span>
@@ -21,13 +21,35 @@
       {{ car.bodyStyle.toLowerCase() }}
     </p>
 
+    <template v-if="engines.length > 0">
+      <p class="car__subtitle car__subtitle--spacing">Engines</p>
+      <div class="car__paintings">
+        <div class="table__row">
+          <div class="table__name">Name</div>
+          <div class="table__description">Fuel type</div>
+          <div class="table__price">Price (PLN)</div>
+        </div>
+
+        <div
+          v-for="(engine, index) in engines"
+          :key="engine.id"
+          class="table__row table__row--item"
+          v-bind:class="[ index % 2 === 0 ? 'table__row--even' : 'table__row--odd' ]"
+        >
+          <div class="table__name">{{ engine.engine.name }}</div>
+          <div class="table__description">{{ engine.engine.fuelType }}</div>
+          <div class="table__price">{{ formatPrice(engine.price) }}</div>
+        </div>
+      </div>
+    </template>
+
     <template v-if="paintings.length > 0">
       <p class="car__subtitle car__subtitle--spacing">Paintings</p>
       <div class="car__paintings">
         <div class="table__row">
           <div class="table__name">Name</div>
-          <div class="table__description">Color</div>
-          <div class="table__price">Price (zł)</div>
+          <div class="table__color">Color</div>
+          <div class="table__price">Price (PLN)</div>
         </div>
 
         <div
@@ -51,7 +73,7 @@
         <div class="table__row">
           <div class="table__name">Name</div>
           <div class="table__description">Description</div>
-          <div class="table__price">Price (zł)</div>
+          <div class="table__price">Price (PLN)</div>
         </div>
 
         <div
@@ -98,6 +120,7 @@ export default {
       generation: {
         name: '',
       },
+      engines: [],
       paintings: [],
       addons: [],
     };
@@ -141,6 +164,7 @@ export default {
           name: brand.name,
         };
 
+        this.setupCarEngines(car.carEngines);
         this.setupPaintings(car.paintings);
         this.setupAddons(car.carAddons);
       } catch (error) {
@@ -161,14 +185,6 @@ export default {
               endYear,
               weight,
               bodyStyle,
-              paintings {
-                id,
-                price,
-                color {
-                  name,
-                  hexCode,
-                },
-              },
               generation {
                 name,
                 model {
@@ -176,6 +192,22 @@ export default {
                   brand {
                     name,
                   },
+                },
+              },
+              carEngines {
+                price,
+                engine {
+                  id,
+                  fuelType,
+                  name,
+                },
+              },
+              paintings {
+                id,
+                price,
+                color {
+                  name,
+                  hexCode,
                 },
               },
               carAddons {
@@ -190,6 +222,17 @@ export default {
           },
         `,
       };
+    },
+    setupCarEngines(carEngines) {
+      this.engines = carEngines.map((carEngine) => ({
+        id: carEngine.id,
+        price: carEngine.price,
+        engine: {
+          id: carEngine.engine.id,
+          name: carEngine.engine.name,
+          fuelType: carEngine.engine.fuelType.toLowerCase(),
+        },
+      }));
     },
     setupPaintings(paintings) {
       this.paintings = paintings.map((painting) => ({
