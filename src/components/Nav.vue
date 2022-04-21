@@ -158,29 +158,7 @@ export default {
       }
 
       &--underlined {
-        display: block;
-        position: relative;
-        padding: .2em 0;
-        overflow: hidden;
-
-        &::after {
-          content: '';
-          position: absolute;
-          bottom: 0;
-          left: 0;
-          width: 100%;
-          height: 1px;
-          background-color: $white;
-          transition: opacity 300ms, transform 300ms;
-          opacity: 1;
-          transform: translate3d(-100%, 0, 0);
-        }
-
-        &:hover, &:focus {
-          &::after {
-            transform: translate3d(0, 0, 0);
-          }
-        }
+        @include link-underlined($white, .2em);
       }
     }
 
