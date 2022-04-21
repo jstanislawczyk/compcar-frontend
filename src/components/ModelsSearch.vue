@@ -79,7 +79,7 @@
                   Available generations: {{ getAvailableGenerationsNames(model.generations)}}
                 </span>
               </div>
-              <span class="result-tile__price">{{ formatPrice(getCheapestCarPrice(model.generations)) }}zł</span>
+              <span class="result-tile__price">{{ formatPrice(getCheapestCarPrice(model.generations)) }}PLN</span>
 
               <router-link :to="`/model/${model.id}`" class="result-tile__link" tag="button">More details</router-link>
             </div>

@@ -28,7 +28,7 @@
                 <span class="car__detail-title">Body style:</span> {{ car.bodyStyle.toLowerCase() }}
               </span>
             </div>
-            <span class="car__price">{{ car.basePrice }}zł</span>
+            <span class="car__price">{{ car.basePrice }}PLN</span>
 
             <router-link :to="`/car/${car.id}`" class="car__link" tag="button">Check car</router-link>
           </div>
@@ -51,7 +51,7 @@
                 <span class="car__detail-title">Body style:</span> {{ car.bodyStyle.toLowerCase() }}
               </span>
             </div>
-            <span class="car__price">{{ formatPrice(car.basePrice) }}zł</span>
+            <span class="car__price">{{ formatPrice(car.basePrice) }}PLN</span>
 
             <router-link :to="`/car/${car.id}`" class="car__link" tag="button">Check car</router-link>
           </div>
@@ -95,8 +95,8 @@ export default {
     buildGeneralProductionDateInformation,
     async setupGenerationData(id) {
       try {
-        const generationByIdQuery = this.getGenerationByIdQuery(id);
-        const generationResponse = await this.$apollo.query(generationByIdQuery);
+        const getGenerationByIdQuery = this.getGenerationByIdQuery(id);
+        const generationResponse = await this.$apollo.query(getGenerationByIdQuery);
 
         const generation = generationResponse.data.getGenerationById;
         this.generation = {
