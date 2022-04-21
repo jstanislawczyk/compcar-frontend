@@ -9,8 +9,8 @@
       {{ buildProductionDateInformation(car.startYear, car.endYear) }}
     </p>
     <p>
-      <span class="car__subtitle">Price:</span>
-      {{ formatPrice(car.basePrice) }}PLN
+      <span class="car__subtitle">Base price:</span>
+      {{ formatPrice(car.basePrice) }} PLN
     </p>
     <p>
       <span class="car__subtitle">Weight:</span>
@@ -21,7 +21,7 @@
       {{ car.bodyStyle.toLowerCase() }}
     </p>
 
-    <template v-if="engines.length > 0">
+    <template v-if="carEngines.length > 0">
       <p class="car__subtitle car__subtitle--spacing">Engines</p>
       <div class="car__paintings">
         <div class="table__row">
@@ -31,13 +31,13 @@
         </div>
 
         <div
-          v-for="(engine, index) in engines"
+          v-for="(engine, index) in carEngines"
           :key="engine.id"
           class="table__row table__row--item"
           v-bind:class="[ index % 2 === 0 ? 'table__row--even' : 'table__row--odd' ]"
         >
           <div class="table__column">
-            <router-link :to="`/engine/${engine.id}`" class="table__link">
+            <router-link :to="`/engine/${engine.engine.id}`" class="table__link">
               {{ engine.engine.name }}
             </router-link>
           </div>
@@ -124,7 +124,7 @@ export default {
       generation: {
         name: '',
       },
-      engines: [],
+      carEngines: [],
       paintings: [],
       addons: [],
     };
@@ -228,7 +228,7 @@ export default {
       };
     },
     setupCarEngines(carEngines) {
-      this.engines = carEngines.map((carEngine) => ({
+      this.carEngines = carEngines.map((carEngine) => ({
         id: carEngine.id,
         price: carEngine.price,
         engine: {
