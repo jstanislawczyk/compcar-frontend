@@ -36,7 +36,11 @@
           class="table__row table__row--item"
           v-bind:class="[ index % 2 === 0 ? 'table__row--even' : 'table__row--odd' ]"
         >
-          <div class="table__column">{{ engine.engine.name }}</div>
+          <div class="table__column">
+            <router-link :to="`/engine/${engine.id}`" class="table__link">
+              {{ engine.engine.name }}
+            </router-link>
+          </div>
           <div class="table__column">{{ engine.engine.fuelType }}</div>
           <div class="table__column">{{ formatPrice(engine.price) }}</div>
         </div>
@@ -259,6 +263,7 @@ export default {
 <style scoped lang="scss">
   @import 'scss/variables/devices';
   @import 'scss/variables/colors';
+  @import 'scss/mixins/controls';
 
   .car {
     min-height: calc(100vh - 50px);
@@ -345,6 +350,10 @@ export default {
           display: none;
         }
       }
+    }
+
+    &__link {
+      @include link-underlined;
     }
 
     &__color-label {

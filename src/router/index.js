@@ -8,6 +8,7 @@ import Login from '@/components/Login';
 import Register from '@/components/Register';
 import Generation from '@/components/Generation';
 import Car from '@/components/Car';
+import Engine from '@/components/Engine';
 
 Vue.use(VueRouter);
 
@@ -46,6 +47,11 @@ const routes = [
     path: '/car/:id',
     name: 'Car',
     component: Car,
+  },
+  {
+    path: '/engine/:id',
+    name: 'Engine',
+    component: Engine,
   },
   {
     path: '/:catchAll(.*)',
