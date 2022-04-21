@@ -1,5 +1,13 @@
 <template>
   <section class="generation">
+    <div class="breadcrumbs">
+      <router-link to="/models-search" class="breadcrumbs__breadcrumb">Models search</router-link>
+      <span class="breadcrumbs__separator">&#xbb;</span>
+      <router-link :to="`/model/${model.id}`" class="breadcrumbs__breadcrumb">{{ `${brand.name} ${model.name}` }}</router-link>
+      <span class="breadcrumbs__separator">&#xbb;</span>
+      <span class="breadcrumbs__current">{{ generation.name }}</span>
+    </div>
+
     <h2 class="generation__name">{{ `${brand.name} ${model.name} ${generation.name}` }}</h2>
     <p>{{ generation.description }}</p>
     <p>
@@ -74,6 +82,7 @@ export default {
     return {
       generation: {},
       model: {
+        id: 0,
         name: '',
       },
       brand: {
@@ -109,6 +118,7 @@ export default {
 
         const model = generation.model;
         this.model = {
+          id: model.id,
           name: model.name,
         };
 
@@ -141,6 +151,7 @@ export default {
                 endYear,
               },
               model {
+                id,
                 name,
                 brand {
                   name,
@@ -167,6 +178,7 @@ export default {
 <style scoped lang="scss">
   @import 'scss/variables/devices';
   @import 'scss/mixins/tiles';
+  @import 'scss/mixins/breadcrumbs';
 
   .generation {
     min-height: calc(100vh - 50px);
@@ -186,8 +198,13 @@ export default {
     }
 
     &__name {
+      margin-top: 15px;
       font-size: 50px;
     }
+  }
+
+  .breadcrumbs {
+    @include breadcrumbs;
   }
 
   .cars {

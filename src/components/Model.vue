@@ -1,5 +1,11 @@
 <template>
   <section class="model">
+    <div class="breadcrumbs">
+      <router-link to="/models-search" class="breadcrumbs__breadcrumb">Models search</router-link>
+      <span class="breadcrumbs__separator">&#xbb;</span>
+      <span class="breadcrumbs__current">{{ brand.name }} {{ model.name }}</span>
+    </div>
+
     <h2 class="model__name">{{ brand.name }} {{ model.name }}</h2>
     <p>{{ model.description }}</p>
 
@@ -152,6 +158,7 @@ export default {
 <style scoped lang="scss">
   @import 'scss/variables/devices';
   @import 'scss/mixins/tiles';
+  @import 'scss/mixins/breadcrumbs';
 
   .model {
     min-height: calc(100vh - 50px);
@@ -167,8 +174,13 @@ export default {
     }
 
     &__name {
+      margin-top: 15px;
       font-size: 50px;
     }
+  }
+
+  .breadcrumbs {
+    @include breadcrumbs;
   }
 
   .generations {

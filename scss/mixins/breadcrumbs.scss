@@ -1,0 +1,23 @@
+@import 'scss/variables/colors';
+@import 'scss/mixins/controls';
+
+@mixin breadcrumbs($color: $pink, $current-breadcrumb-color: $dark-pink, $font-size: 15px, $padding: .1em, $time: 300ms) {
+  display: flex;
+  justify-content: left;
+  font-size: $font-size;
+
+  &__breadcrumb {
+    @include link-underlined($color, $padding, $time);
+  }
+
+  &__separator {
+    margin: 0 5px;
+    font-size: calc(#{$font-size} + 2px);
+    color: $color;
+  }
+
+  &__current {
+    color: $current-breadcrumb-color;
+    padding: $padding;
+  }
+}

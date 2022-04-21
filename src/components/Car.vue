@@ -1,5 +1,15 @@
 <template>
   <section class="car">
+    <div class="breadcrumbs">
+      <router-link to="/models-search" class="breadcrumbs__breadcrumb">Models search</router-link>
+      <span class="breadcrumbs__separator">&#xbb;</span>
+      <router-link :to="`/model/${model.id}`" class="breadcrumbs__breadcrumb">{{ `${brand.name} ${model.name}` }}</router-link>
+      <span class="breadcrumbs__separator">&#xbb;</span>
+      <router-link :to="`/generation/${generation.id}`" class="breadcrumbs__breadcrumb">{{ generation.name }}</router-link>
+      <span class="breadcrumbs__separator">&#xbb;</span>
+      <span class="breadcrumbs__current">{{ car.name }}</span>
+    </div>
+
     <h2 class="car__name">{{ `${brand.name} ${model.name} ${generation.name} ${car.name}` }}</h2>
     <img class="car__image" src="https://cdn.pixabay.com/photo/2013/07/12/17/47/test-pattern-152459_960_720.png" alt="Car photo" />
     <p class="car__description">{{ car.description }}</p>
@@ -116,12 +126,14 @@ export default {
         bodyStyle: 'unknown',
       },
       model: {
+        id: 0,
         name: '',
       },
       brand: {
         name: '',
       },
       generation: {
+        id: 0,
         name: '',
       },
       carEngines: [],
@@ -155,11 +167,13 @@ export default {
 
         const generation = car.generation;
         this.generation = {
+          id: generation.id,
           name: generation.name,
         };
 
         const model = generation.model;
         this.model = {
+          id: model.id,
           name: model.name,
         };
 
@@ -190,8 +204,10 @@ export default {
               weight,
               bodyStyle,
               generation {
+                id,
                 name,
                 model {
+                  id,
                   name,
                   brand {
                     name,
@@ -264,6 +280,7 @@ export default {
   @import 'scss/variables/devices';
   @import 'scss/variables/colors';
   @import 'scss/mixins/controls';
+  @import 'scss/mixins/breadcrumbs';
 
   .car {
     min-height: calc(100vh - 50px);
@@ -306,8 +323,13 @@ export default {
     }
 
     &__name {
+      margin-top: 15px;
       font-size: 50px;
     }
+  }
+
+  .breadcrumbs {
+    @include breadcrumbs;
   }
 
   .table {
