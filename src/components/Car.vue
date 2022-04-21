@@ -281,51 +281,10 @@ export default {
   @import 'scss/variables/colors';
   @import 'scss/mixins/controls';
   @import 'scss/mixins/breadcrumbs';
+  @import 'scss/mixins/pages';
 
   .car {
-    min-height: calc(100vh - 50px);
-    padding: 30px 5% 20px;
-    text-align: left;
-
-    @media (min-width: $desktop-small) {
-      padding: 30px 10% 20px;
-    }
-
-    @media (min-width: $desktop-medium) {
-      padding: 30px 15% 20px;
-    }
-
-    &__image {
-      width: 100%;
-      display: block;
-      margin: 10px auto 60px;
-      border: 1px solid #000;
-
-      @media (min-width: $desktop-small) {
-        width: 80%;
-      }
-
-      @media (min-width: $desktop-medium) {
-        width: 70%;
-      }
-    }
-
-    &__description {
-      margin-bottom: 35px;
-    }
-
-    &__subtitle {
-      font-weight: 700;
-
-      &--spacing {
-        margin-top: 50px;
-      }
-    }
-
-    &__name {
-      margin-top: 15px;
-      font-size: 50px;
-    }
+    @include titled-page;
   }
 
   .breadcrumbs {

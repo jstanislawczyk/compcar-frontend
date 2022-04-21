@@ -73,19 +73,9 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  @import 'scss/variables/devices';
+  @import 'scss/mixins/pages';
 
   .engine {
-    min-height: calc(100vh - 50px);
-    padding: 30px 5% 20px;
-    text-align: left;
-
-    @media (min-width: $desktop-small) {
-      padding: 30px 10% 20px;
-    }
-
-    @media (min-width: $desktop-medium) {
-      padding: 30px 15% 20px;
-    }
+    @include titled-page;
   }
 </style>

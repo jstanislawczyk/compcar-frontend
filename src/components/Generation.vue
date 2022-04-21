@@ -176,31 +176,12 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  @import 'scss/variables/devices';
+  @import 'scss/mixins/pages';
   @import 'scss/mixins/tiles';
   @import 'scss/mixins/breadcrumbs';
 
   .generation {
-    min-height: calc(100vh - 50px);
-    padding: 30px 5% 20px;
-    text-align: left;
-
-    &__subtitle {
-      font-weight: 700;
-    }
-
-    @media (min-width: $desktop-small) {
-      padding: 30px 10% 20px;
-    }
-
-    @media (min-width: $desktop-medium) {
-      padding: 30px 15% 20px;
-    }
-
-    &__name {
-      margin-top: 15px;
-      font-size: 50px;
-    }
+    @include titled-page;
   }
 
   .breadcrumbs {
