@@ -68,7 +68,9 @@ export default {
   data() {
     return {
       model: {},
-      brand: {},
+      brand: {
+        name: '',
+      },
       generations: {
         available: [],
         discontinued: [],
@@ -86,14 +88,10 @@ export default {
       try {
         const getModelByIdQuery = this.getModelByIdQuery(id);
         const modelResponse = await this.$apollo.query(getModelByIdQuery);
-        const model = modelResponse.data.getModelById;
 
-        this.model = {
-          id: model.id,
-          name: model.name,
-          description: model.description,
-        };
-        this.brand = model.brand;
+        const model = modelResponse.data.getModelById;
+        this.model = this.buildModel(model);
+        this.brand = this.buildBrand(model.brand);
         this.initGenerationsData(model.generations);
       } catch (error) {
         const parsedError = parseGraphQlErrorMessage(error);
@@ -126,6 +124,18 @@ export default {
             },
           }
         `,
+      };
+    },
+    buildModel(model) {
+      return {
+        id: model.id,
+        name: model.name,
+        description: model.description,
+      };
+    },
+    buildBrand(brand) {
+      return {
+        name: brand.name,
       };
     },
     initGenerationsData(generations) {

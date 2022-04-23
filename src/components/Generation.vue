@@ -108,24 +108,13 @@ export default {
         const generationResponse = await this.$apollo.query(getGenerationByIdQuery);
 
         const generation = generationResponse.data.getGenerationById;
-        this.generation = {
-          id: generation.id,
-          name: generation.name,
-          description: generation.description,
-          startYear: generation.startYear,
-          endYear: generation.endYear,
-        };
+        this.generation = this.buildGeneration(generation);
 
         const model = generation.model;
-        this.model = {
-          id: model.id,
-          name: model.name,
-        };
+        this.model = this.buildModel(model);
 
         const brand = model.brand;
-        this.brand = {
-          name: brand.name,
-        };
+        this.brand = this.buildBrand(brand);
 
         this.initCarsData(generation.cars);
       } catch (error) {
@@ -170,6 +159,26 @@ export default {
           this.cars.discontinued.push(car);
         }
       });
+    },
+    buildGeneration(generation) {
+      return {
+        id: generation.id,
+        name: generation.name,
+        description: generation.description,
+        startYear: generation.startYear,
+        endYear: generation.endYear,
+      };
+    },
+    buildModel(model) {
+      return {
+        id: model.id,
+        name: model.name,
+      };
+    },
+    buildBrand(brand) {
+      return {
+        name: brand.name,
+      };
     },
   },
 };

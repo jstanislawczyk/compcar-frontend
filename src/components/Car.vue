@@ -154,37 +154,20 @@ export default {
         const carResponse = await this.$apollo.query(getCarByIdQuery);
 
         const car = carResponse.data.getCarById;
-        this.car = {
-          id: car.id,
-          name: car.name,
-          description: car.description,
-          basePrice: car.basePrice,
-          startYear: car.startYear,
-          endYear: car.endYear,
-          weight: car.weight,
-          bodyStyle: car.bodyStyle,
-        };
+        this.car = this.buildCar(car);
 
         const generation = car.generation;
-        this.generation = {
-          id: generation.id,
-          name: generation.name,
-        };
+        this.generation = this.buildGeneration(generation);
 
         const model = generation.model;
-        this.model = {
-          id: model.id,
-          name: model.name,
-        };
+        this.model = this.buildModel(model);
 
         const brand = model.brand;
-        this.brand = {
-          name: brand.name,
-        };
+        this.brand = this.buildBrand(brand);
 
-        this.setupCarEngines(car.carEngines);
-        this.setupPaintings(car.paintings);
-        this.setupAddons(car.carAddons);
+        this.carEngines = this.buildCarEngines(car.carEngines);
+        this.paintings = this.buildPaintings(car.paintings);
+        this.addons = this.buildAddons(car.carAddons);
       } catch (error) {
         const parsedError = parseGraphQlErrorMessage(error);
         console.log(parsedError);
@@ -243,8 +226,37 @@ export default {
         `,
       };
     },
-    setupCarEngines(carEngines) {
-      this.carEngines = carEngines.map((carEngine) => ({
+    buildCar(car) {
+      return {
+        id: car.id,
+        name: car.name,
+        description: car.description,
+        basePrice: car.basePrice,
+        startYear: car.startYear,
+        endYear: car.endYear,
+        weight: car.weight,
+        bodyStyle: car.bodyStyle,
+      };
+    },
+    buildBrand(brand) {
+      return {
+        name: brand.name,
+      };
+    },
+    buildGeneration(generation) {
+      return {
+        id: generation.id,
+        name: generation.name,
+      };
+    },
+    buildModel(model) {
+      return {
+        id: model.id,
+        name: model.name,
+      };
+    },
+    buildCarEngines(carEngines) {
+      return carEngines.map((carEngine) => ({
         id: carEngine.id,
         price: carEngine.price,
         engine: {
@@ -254,8 +266,8 @@ export default {
         },
       }));
     },
-    setupPaintings(paintings) {
-      this.paintings = paintings.map((painting) => ({
+    buildPaintings(paintings) {
+      return paintings.map((painting) => ({
         id: painting.id,
         price: painting.price,
         color: {
@@ -264,8 +276,8 @@ export default {
         },
       }));
     },
-    setupAddons(carAddons) {
-      this.addons = carAddons.map((carAddon) => ({
+    buildAddons(carAddons) {
+      return carAddons.map((carAddon) => ({
         id: carAddon.addon.id,
         name: carAddon.addon.name,
         description: carAddon.addon.description,
