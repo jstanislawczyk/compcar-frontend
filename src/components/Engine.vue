@@ -1,6 +1,31 @@
 <template>
   <section class="engine">
     <h2 class="engine__name">{{ engine.name }}</h2>
+
+    <p>
+      <span class="engine__subtitle">Fuel type:</span>
+      {{ engine.fuelType.toLowerCase() }}
+    </p>
+    <p>
+      <span class="engine__subtitle">Fuel capacity:</span>
+      {{ engine.fuelCapacity }} cm3
+    </p>
+    <p>
+      <span class="engine__subtitle">Average fuel consumption:</span>
+      {{ engine.averageFuelConsumption }} l/100km
+    </p>
+    <p>
+      <span class="engine__subtitle">Horse power:</span>
+      {{ engine.horsePower }} HP
+    </p>
+    <p>
+      <span class="engine__subtitle">Acceleration:</span>
+      {{ engine.acceleration }} s
+    </p>
+    <p>
+      <span class="engine__subtitle">Invented year:</span>
+      {{ engine.inventedYear }}
+    </p>
   </section>
 </template>
 
@@ -35,16 +60,7 @@ export default {
         const engineResponse = await this.$apollo.query(getEngineByIdQuery);
 
         const engine = engineResponse.data.getEngineById;
-        this.engine = {
-          id: engine.id,
-          name: engine.name,
-          fuelType: engine.fuelType,
-          horsePower: engine.horsePower,
-          acceleration: engine.acceleration,
-          averageFuelConsumption: engine.averageFuelConsumption,
-          fuelCapacity: engine.fuelCapacity,
-          inventedYear: engine.inventedYear,
-        };
+        this.engine = this.buildEngine(engine);
       } catch (error) {
         const parsedError = parseGraphQlErrorMessage(error);
         console.log(parsedError);
@@ -66,6 +82,18 @@ export default {
             },
           },
         `,
+      };
+    },
+    buildEngine(engine) {
+      return {
+        id: engine.id,
+        name: engine.name,
+        fuelType: engine.fuelType,
+        horsePower: engine.horsePower,
+        acceleration: engine.acceleration,
+        averageFuelConsumption: engine.averageFuelConsumption,
+        fuelCapacity: engine.fuelCapacity,
+        inventedYear: engine.inventedYear,
       };
     },
   },
