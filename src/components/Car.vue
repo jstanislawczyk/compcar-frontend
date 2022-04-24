@@ -1,5 +1,15 @@
 <template>
   <section class="car">
+    <div class="breadcrumbs">
+      <router-link to="/models-search" class="breadcrumbs__breadcrumb">Models search</router-link>
+      <span class="breadcrumbs__separator">&#xbb;</span>
+      <router-link :to="`/model/${model.id}`" class="breadcrumbs__breadcrumb">{{ `${brand.name} ${model.name}` }}</router-link>
+      <span class="breadcrumbs__separator">&#xbb;</span>
+      <router-link :to="`/generation/${generation.id}`" class="breadcrumbs__breadcrumb">{{ generation.name }}</router-link>
+      <span class="breadcrumbs__separator">&#xbb;</span>
+      <span class="breadcrumbs__current">{{ car.name }}</span>
+    </div>
+
     <h2 class="car__name">{{ `${brand.name} ${model.name} ${generation.name} ${car.name}` }}</h2>
     <img class="car__image" src="https://cdn.pixabay.com/photo/2013/07/12/17/47/test-pattern-152459_960_720.png" alt="Car photo" />
     <p class="car__description">{{ car.description }}</p>
@@ -9,8 +19,8 @@
       {{ buildProductionDateInformation(car.startYear, car.endYear) }}
     </p>
     <p>
-      <span class="car__subtitle">Price:</span>
-      {{ formatPrice(car.basePrice) }}PLN
+      <span class="car__subtitle">Base price:</span>
+      {{ formatPrice(car.basePrice) }} PLN
     </p>
     <p>
       <span class="car__subtitle">Weight:</span>
@@ -21,7 +31,7 @@
       {{ car.bodyStyle.toLowerCase() }}
     </p>
 
-    <template v-if="engines.length > 0">
+    <template v-if="carEngines.length > 0">
       <p class="car__subtitle car__subtitle--spacing">Engines</p>
       <div class="car__paintings">
         <div class="table__row">
@@ -31,12 +41,16 @@
         </div>
 
         <div
-          v-for="(engine, index) in engines"
+          v-for="(engine, index) in carEngines"
           :key="engine.id"
           class="table__row table__row--item"
           v-bind:class="[ index % 2 === 0 ? 'table__row--even' : 'table__row--odd' ]"
         >
-          <div class="table__column">{{ engine.engine.name }}</div>
+          <div class="table__column">
+            <router-link :to="`/engine/${engine.engine.id}`" class="table__link">
+              {{ engine.engine.name }}
+            </router-link>
+          </div>
           <div class="table__column">{{ engine.engine.fuelType }}</div>
           <div class="table__column">{{ formatPrice(engine.price) }}</div>
         </div>
@@ -112,15 +126,17 @@ export default {
         bodyStyle: 'unknown',
       },
       model: {
+        id: 0,
         name: '',
       },
       brand: {
         name: '',
       },
       generation: {
+        id: 0,
         name: '',
       },
-      engines: [],
+      carEngines: [],
       paintings: [],
       addons: [],
     };
@@ -138,35 +154,20 @@ export default {
         const carResponse = await this.$apollo.query(getCarByIdQuery);
 
         const car = carResponse.data.getCarById;
-        this.car = {
-          id: car.id,
-          name: car.name,
-          description: car.description,
-          basePrice: car.basePrice,
-          startYear: car.startYear,
-          endYear: car.endYear,
-          weight: car.weight,
-          bodyStyle: car.bodyStyle,
-        };
+        this.car = this.buildCar(car);
 
         const generation = car.generation;
-        this.generation = {
-          name: generation.name,
-        };
+        this.generation = this.buildGeneration(generation);
 
         const model = generation.model;
-        this.model = {
-          name: model.name,
-        };
+        this.model = this.buildModel(model);
 
         const brand = model.brand;
-        this.brand = {
-          name: brand.name,
-        };
+        this.brand = this.buildBrand(brand);
 
-        this.setupCarEngines(car.carEngines);
-        this.setupPaintings(car.paintings);
-        this.setupAddons(car.carAddons);
+        this.carEngines = this.buildCarEngines(car.carEngines);
+        this.paintings = this.buildPaintings(car.paintings);
+        this.addons = this.buildAddons(car.carAddons);
       } catch (error) {
         const parsedError = parseGraphQlErrorMessage(error);
         console.log(parsedError);
@@ -186,8 +187,10 @@ export default {
               weight,
               bodyStyle,
               generation {
+                id,
                 name,
                 model {
+                  id,
                   name,
                   brand {
                     name,
@@ -223,8 +226,37 @@ export default {
         `,
       };
     },
-    setupCarEngines(carEngines) {
-      this.engines = carEngines.map((carEngine) => ({
+    buildCar(car) {
+      return {
+        id: car.id,
+        name: car.name,
+        description: car.description,
+        basePrice: car.basePrice,
+        startYear: car.startYear,
+        endYear: car.endYear,
+        weight: car.weight,
+        bodyStyle: car.bodyStyle,
+      };
+    },
+    buildBrand(brand) {
+      return {
+        name: brand.name,
+      };
+    },
+    buildGeneration(generation) {
+      return {
+        id: generation.id,
+        name: generation.name,
+      };
+    },
+    buildModel(model) {
+      return {
+        id: model.id,
+        name: model.name,
+      };
+    },
+    buildCarEngines(carEngines) {
+      return carEngines.map((carEngine) => ({
         id: carEngine.id,
         price: carEngine.price,
         engine: {
@@ -234,8 +266,8 @@ export default {
         },
       }));
     },
-    setupPaintings(paintings) {
-      this.paintings = paintings.map((painting) => ({
+    buildPaintings(paintings) {
+      return paintings.map((painting) => ({
         id: painting.id,
         price: painting.price,
         color: {
@@ -244,8 +276,8 @@ export default {
         },
       }));
     },
-    setupAddons(carAddons) {
-      this.addons = carAddons.map((carAddon) => ({
+    buildAddons(carAddons) {
+      return carAddons.map((carAddon) => ({
         id: carAddon.addon.id,
         name: carAddon.addon.name,
         description: carAddon.addon.description,
@@ -259,50 +291,16 @@ export default {
 <style scoped lang="scss">
   @import 'scss/variables/devices';
   @import 'scss/variables/colors';
+  @import 'scss/mixins/controls';
+  @import 'scss/mixins/breadcrumbs';
+  @import 'scss/mixins/pages';
 
   .car {
-    min-height: calc(100vh - 50px);
-    padding: 30px 5% 20px;
-    text-align: left;
+    @include titled-page;
+  }
 
-    @media (min-width: $desktop-small) {
-      padding: 30px 10% 20px;
-    }
-
-    @media (min-width: $desktop-medium) {
-      padding: 30px 15% 20px;
-    }
-
-    &__image {
-      width: 100%;
-      display: block;
-      margin: 10px auto 60px;
-      border: 1px solid #000;
-
-      @media (min-width: $desktop-small) {
-        width: 80%;
-      }
-
-      @media (min-width: $desktop-medium) {
-        width: 70%;
-      }
-    }
-
-    &__description {
-      margin-bottom: 35px;
-    }
-
-    &__subtitle {
-      font-weight: 700;
-
-      &--spacing {
-        margin-top: 50px;
-      }
-    }
-
-    &__name {
-      font-size: 50px;
-    }
+  .breadcrumbs {
+    @include breadcrumbs;
   }
 
   .table {
@@ -345,6 +343,10 @@ export default {
           display: none;
         }
       }
+    }
+
+    &__link {
+      @include link-underlined;
     }
 
     &__color-label {

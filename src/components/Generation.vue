@@ -1,5 +1,13 @@
 <template>
   <section class="generation">
+    <div class="breadcrumbs">
+      <router-link to="/models-search" class="breadcrumbs__breadcrumb">Models search</router-link>
+      <span class="breadcrumbs__separator">&#xbb;</span>
+      <router-link :to="`/model/${model.id}`" class="breadcrumbs__breadcrumb">{{ `${brand.name} ${model.name}` }}</router-link>
+      <span class="breadcrumbs__separator">&#xbb;</span>
+      <span class="breadcrumbs__current">{{ generation.name }}</span>
+    </div>
+
     <h2 class="generation__name">{{ `${brand.name} ${model.name} ${generation.name}` }}</h2>
     <p>{{ generation.description }}</p>
     <p>
@@ -28,7 +36,7 @@
                 <span class="car__detail-title">Body style:</span> {{ car.bodyStyle.toLowerCase() }}
               </span>
             </div>
-            <span class="car__price">{{ car.basePrice }}PLN</span>
+            <span class="car__price">{{ car.basePrice }} PLN</span>
 
             <router-link :to="`/car/${car.id}`" class="car__link" tag="button">Check car</router-link>
           </div>
@@ -51,7 +59,7 @@
                 <span class="car__detail-title">Body style:</span> {{ car.bodyStyle.toLowerCase() }}
               </span>
             </div>
-            <span class="car__price">{{ formatPrice(car.basePrice) }}PLN</span>
+            <span class="car__price">{{ formatPrice(car.basePrice) }} PLN</span>
 
             <router-link :to="`/car/${car.id}`" class="car__link" tag="button">Check car</router-link>
           </div>
@@ -74,6 +82,7 @@ export default {
     return {
       generation: {},
       model: {
+        id: 0,
         name: '',
       },
       brand: {
@@ -99,23 +108,13 @@ export default {
         const generationResponse = await this.$apollo.query(getGenerationByIdQuery);
 
         const generation = generationResponse.data.getGenerationById;
-        this.generation = {
-          id: generation.id,
-          name: generation.name,
-          description: generation.description,
-          startYear: generation.startYear,
-          endYear: generation.endYear,
-        };
+        this.generation = this.buildGeneration(generation);
 
         const model = generation.model;
-        this.model = {
-          name: model.name,
-        };
+        this.model = this.buildModel(model);
 
         const brand = model.brand;
-        this.brand = {
-          name: brand.name,
-        };
+        this.brand = this.buildBrand(brand);
 
         this.initCarsData(generation.cars);
       } catch (error) {
@@ -141,6 +140,7 @@ export default {
                 endYear,
               },
               model {
+                id,
                 name,
                 brand {
                   name,
@@ -160,34 +160,41 @@ export default {
         }
       });
     },
+    buildGeneration(generation) {
+      return {
+        id: generation.id,
+        name: generation.name,
+        description: generation.description,
+        startYear: generation.startYear,
+        endYear: generation.endYear,
+      };
+    },
+    buildModel(model) {
+      return {
+        id: model.id,
+        name: model.name,
+      };
+    },
+    buildBrand(brand) {
+      return {
+        name: brand.name,
+      };
+    },
   },
 };
 </script>
 
 <style scoped lang="scss">
-  @import 'scss/variables/devices';
+  @import 'scss/mixins/pages';
   @import 'scss/mixins/tiles';
+  @import 'scss/mixins/breadcrumbs';
 
   .generation {
-    min-height: calc(100vh - 50px);
-    padding: 30px 5% 20px;
-    text-align: left;
+    @include titled-page;
+  }
 
-    &__subtitle {
-      font-weight: 700;
-    }
-
-    @media (min-width: $desktop-small) {
-      padding: 30px 10% 20px;
-    }
-
-    @media (min-width: $desktop-medium) {
-      padding: 30px 15% 20px;
-    }
-
-    &__name {
-      font-size: 50px;
-    }
+  .breadcrumbs {
+    @include breadcrumbs;
   }
 
   .cars {

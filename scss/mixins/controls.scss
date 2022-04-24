@@ -26,3 +26,31 @@
     color: $color;
   }
 }
+
+@mixin link-underlined($color: $pink, $padding: .1em, $time: 300ms) {
+  display: block;
+  position: relative;
+  padding: $padding 0;
+  overflow: hidden;
+  text-decoration: none;
+  color: $color;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background-color: $color;
+    transition: opacity $time, transform $time;
+    opacity: 1;
+    transform: translate3d(-100%, 0, 0);
+  }
+
+  &:hover, &:focus {
+    &::after {
+      transform: translate3d(0, 0, 0);
+    }
+  }
+}
