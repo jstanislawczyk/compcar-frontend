@@ -307,16 +307,16 @@ export default {
     &__row {
       display: flex;
       min-height: 50px;
-      border-left: 1px solid #000;
-      border-right: 1px solid #000;
-      background: #000;
-      color: #FFF;
+      border-left: 1px solid $black;
+      border-right: 1px solid $black;
+      background: $black;
+      color: $white;
       text-align: center;
 
       &--item {
         border-left: 1px solid $light-gray;
         border-right: 1px solid $light-gray;
-        color: #000;
+        color: $black;
 
         &:last-child {
           border-bottom: 1px solid $light-gray;
@@ -328,7 +328,7 @@ export default {
       }
 
       &--even {
-        background: #FFF;
+        background: $white;
       }
     }
 
