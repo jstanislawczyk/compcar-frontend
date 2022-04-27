@@ -2,6 +2,7 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Home from '@/views/Home';
 import NotFound from '@/views/NotFound';
+import Admin from '@/components/Admin';
 import ModelsSearch from '@/components/ModelsSearch';
 import Model from '@/components/Model';
 import Login from '@/components/Login';
@@ -27,6 +28,11 @@ const routes = [
     path: '/login',
     name: 'Login',
     component: Login,
+  },
+  {
+    path: '/admin',
+    name: 'Admin',
+    component: Admin,
   },
   {
     path: '/models-search',
