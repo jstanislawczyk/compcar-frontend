@@ -128,16 +128,7 @@ export default {
     }
 
     &__link {
-      background: none;
-      border: none;
-      font-size: 16px;
-      color: $white;
-      text-decoration: none;
-      cursor: pointer;
-
-      &:hover {
-        color: $pink;
-      }
+      @include link-no-underline;
 
       @media (min-width: $desktop-small)  {
         &:not(:last-child) {

@@ -2,7 +2,6 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Home from '@/views/Home';
 import NotFound from '@/views/NotFound';
-import Admin from '@/components/Admin';
 import ModelsSearch from '@/components/ModelsSearch';
 import Model from '@/components/Model';
 import Login from '@/components/Login';
@@ -10,6 +9,9 @@ import Register from '@/components/Register';
 import Generation from '@/components/Generation';
 import Car from '@/components/Car';
 import Engine from '@/components/Engine';
+import Admin from '@/components/Admin';
+import AdminColors from '@/components/AdminColors';
+import AdminUsers from '@/components/AdminUsers';
 
 Vue.use(VueRouter);
 
@@ -28,11 +30,6 @@ const routes = [
     path: '/login',
     name: 'Login',
     component: Login,
-  },
-  {
-    path: '/admin',
-    name: 'Admin',
-    component: Admin,
   },
   {
     path: '/models-search',
@@ -58,6 +55,23 @@ const routes = [
     path: '/engine/:id',
     name: 'Engine',
     component: Engine,
+  },
+  {
+    path: '/admin',
+    name: 'Admin',
+    component: Admin,
+    children: [
+      {
+        path: '/admin/colors',
+        name: 'AdminColors',
+        component: AdminColors,
+      },
+      {
+        path: '/admin/users',
+        name: 'AdminUsers',
+        component: AdminUsers,
+      },
+    ],
   },
   {
     path: '/:catchAll(.*)',
