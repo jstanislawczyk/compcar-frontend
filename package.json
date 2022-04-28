@@ -12,6 +12,7 @@
     "core-js": "^3.21.1",
     "graphql": "^15.8.0",
     "graphql-tag": "^2.12.6",
+    "jwt-decode": "^3.1.2",
     "validator": "^13.7.0",
     "vue": "^2.6.11",
     "vue-apollo": "^3.1.0",

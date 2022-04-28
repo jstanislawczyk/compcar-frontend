@@ -7,7 +7,7 @@
 
       <div class="nav__links">
         <router-link to="/models-search" class="nav__link nav__link--pink" tag="button">Search</router-link>
-        <router-link to="/" class="nav__link nav__link--underlined">Home</router-link>
+        <router-link v-if="this.isAdmin()" to="/admin" class="nav__link nav__link--underlined">Admin panel</router-link>
         <router-link v-if="!this.isAuthenticated()" to="/register" class="nav__link nav__link--underlined">Register</router-link>
         <router-link v-if="!this.isAuthenticated()" to="/login" class="nav__link nav__link--underlined">Login</router-link>
         <button v-if="this.isAuthenticated()" class="nav__link nav__link--underlined" v-on:click="logoutUser()">Logout</button>
@@ -24,7 +24,7 @@
     </div>
 
     <div v-if="!isMobileMenuClosed" class="nav__links nav__links--mobile">
-      <router-link to="/" class="nav__link">Home</router-link>
+      <router-link v-if="this.isAdmin()" to="/admin" class="nav__link">Admin panel</router-link>
       <router-link v-if="!this.isAuthenticated()" to="/register" class="nav__link">Register</router-link>
       <router-link v-if="!this.isAuthenticated()" to="/login" class="nav__link">Login</router-link>
       <button v-if="this.isAuthenticated()" class="nav__link">Logout</button>
@@ -128,12 +128,7 @@ export default {
     }
 
     &__link {
-      background: none;
-      border: none;
-      font-size: 16px;
-      color: $white;
-      text-decoration: none;
-      cursor: pointer;
+      @include link-no-underline;
 
       @media (min-width: $desktop-small)  {
         &:not(:last-child) {
