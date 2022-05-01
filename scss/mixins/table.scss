@@ -1,0 +1,50 @@
+@import 'scss/variables/devices';
+@import 'scss/variables/colors';
+@import 'scss/mixins/controls';
+
+@mixin table() {
+  &__row {
+    display: flex;
+    min-height: 50px;
+    border-left: 1px solid $black;
+    border-right: 1px solid $black;
+    background: $black;
+    color: $white;
+    text-align: center;
+
+    &--item {
+      border-left: 1px solid $light-gray;
+      border-right: 1px solid $light-gray;
+      color: $black;
+
+      &:last-child {
+        border-bottom: 1px solid $light-gray;
+      }
+    }
+
+    &--odd {
+      background: $light-gray;
+    }
+
+    &--even {
+      background: $white;
+    }
+  }
+
+  &__column {
+    flex: 1 1 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &--desktop {
+      @media (max-width: $tablet) {
+        display: none;
+      }
+    }
+  }
+
+  &__link {
+    @include link-underlined;
+  }
+}
