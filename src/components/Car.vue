@@ -289,10 +289,10 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  @import 'scss/variables/colors';
   @import 'scss/mixins/breadcrumbs';
   @import 'scss/mixins/pages';
   @import 'scss/mixins/table';
+  @import 'scss/mixins/labels';
 
   .car {
     @include titled-page;
@@ -306,9 +306,7 @@ export default {
     @include table;
 
     &__color-label {
-      width: 50px;
-      height: 30px;
-      border: 1px solid $black;
+      @include color-label;
     }
   }
 </style>
