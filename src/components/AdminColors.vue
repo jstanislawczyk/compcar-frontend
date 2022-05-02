@@ -30,16 +30,16 @@
         v-bind:class="[ colors.length % 2 === 0 ? 'table__row--even' : 'table__row--odd' ]"
       >
         <div class="table__column">
-          <input v-model="colorToSave.name">
+          <input v-model="colorToSave.name" placeholder="e.g. red">
         </div>
         <div class="table__column">
-          <input v-model="colorToSave.hexCode">
+          <input v-model="colorToSave.hexCode" placeholder="e.g. #F00">
         </div>
         <div class="table__column">
           <div class="table__color-label" :style="{ 'background-color': colorToSave.hexCode || '#FFF' }"></div>
         </div>
         <div class="table__column">
-          <button class="table__save"></button>
+          <button v-on:click="createColor()" class="table__save"></button>
         </div>
       </div>
     </div>
@@ -90,12 +90,43 @@ export default {
         `,
       };
     },
+    async createColor() {
+      try {
+        const createColorQuery = this.getCreateColorQuery(this.colorToSave);
+        const createColorResponse = await this.$apollo.query(createColorQuery);
+        const newColor = createColorResponse.data.createColor;
+        this.colors.push(this.buildColor(newColor));
+      } catch (error) {
+        console.log(error);
+        const parsedError = parseGraphQlErrorMessage(error);
+        console.log(parsedError);
+      }
+    },
+    getCreateColorQuery(newColor) {
+      return gql`
+        mutation {
+          createColor (
+            createColorInput: {
+              name: "${newColor.name}",
+              hexCode: "${newColor.hexCode}",
+            }
+          ) {
+            id,
+            name,
+            hexCode,
+          }
+        }
+      `;
+    },
     buildColors(colors) {
-      return colors.map((color) => ({
+      return colors.map((color) => this.buildColor(color));
+    },
+    buildColor(color) {
+      return {
         id: color.id,
         name: color.name,
         hexCode: color.hexCode,
-      }));
+      };
     },
   },
 };
