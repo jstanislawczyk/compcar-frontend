@@ -59,6 +59,9 @@ export default {
         name: '',
         hexCode: '',
       },
+      errors: {
+        colorCreateErrors: [],
+      },
     };
   },
   async created() {
@@ -92,14 +95,31 @@ export default {
     },
     async createColor() {
       try {
+        this.errors.colorCreateErrors = this.validateColor(this.colorToSave);
+        console.log(this.errors.colorCreateErrors);
+        if (this.errors.colorCreateErrors.length > 0) {
+          return;
+        }
+
         const createColorQuery = this.getCreateColorQuery(this.colorToSave);
-        const createColorResponse = await this.$apollo.query(createColorQuery);
+        const createColorResponse = await this.$apollo.mutate({
+          mutation: createColorQuery,
+        });
         const newColor = createColorResponse.data.createColor;
+
+        this.$store.commit('toggleInfoPanel', {
+          message: 'Color created successfully',
+          type: 'success',
+        });
         this.colors.push(this.buildColor(newColor));
+        this.clearColorToSaveData();
       } catch (error) {
-        console.log(error);
         const parsedError = parseGraphQlErrorMessage(error);
-        console.log(parsedError);
+
+        this.$store.commit('toggleInfoPanel', {
+          message: parsedError,
+          type: 'error',
+        });
       }
     },
     getCreateColorQuery(newColor) {
@@ -127,6 +147,21 @@ export default {
         name: color.name,
         hexCode: color.hexCode,
       };
+    },
+    clearColorToSaveData() {
+      this.colorToSave = {
+        name: '',
+        hexCode: '',
+      };
+    },
+    validateColor(colorToSave) {
+      const colorErrors = [];
+
+      if (colorToSave.name.length < 2 || colorToSave.name.length > 64) {
+        colorErrors.push('Color name should have length between 2 and 64');
+      }
+
+      return colorErrors;
     },
   },
 };
