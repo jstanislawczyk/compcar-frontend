@@ -42,12 +42,26 @@
           <button v-on:click="createColor()" class="table__save"></button>
         </div>
       </div>
+      <div
+        v-if="errors.colorCreateErrors.length > 0"
+        class="table__row table__row--item table__row--errors"
+        v-bind:class="[ colors.length % 2 === 0 ? 'table__row--even' : 'table__row--odd' ]"
+      >
+        <p
+          v-for="error in errors.colorCreateErrors"
+          v-bind:key="error"
+          class="table__error"
+        >
+          {{ error }}
+        </p>
+      </div>
     </div>
   </section>
 </template>
 
 <script>
 import { parseGraphQlErrorMessage } from '@/common/errors';
+import { isHexCode } from '@/common/text';
 import gql from 'graphql-tag';
 
 export default {
@@ -68,6 +82,7 @@ export default {
     await this.setupColorsData();
   },
   methods: {
+    isHexCode,
     async setupColorsData() {
       try {
         const getAllColorsQuery = this.getAllColorsQuery();
@@ -159,6 +174,10 @@ export default {
 
       if (colorToSave.name.length < 2 || colorToSave.name.length > 64) {
         colorErrors.push('Color name should have length between 2 and 64');
+      }
+
+      if (!isHexCode(colorToSave.hexCode)) {
+        colorErrors.push('Should be valid hex code');
       }
 
       return colorErrors;

@@ -29,6 +29,13 @@
     &--even {
       background: $white;
     }
+
+    &--errors {
+      flex-direction: column;
+      min-height: unset;
+      padding: 0 20px;
+      text-align: left;
+    }
   }
 
   &__column {
@@ -41,6 +48,16 @@
       @media (max-width: $tablet) {
         display: none;
       }
+    }
+  }
+
+  &__error {
+    color: $red;
+    font-size: 13px;
+    margin: 5px;
+
+    &:last-child {
+      margin-bottom: 15px;
     }
   }
 
