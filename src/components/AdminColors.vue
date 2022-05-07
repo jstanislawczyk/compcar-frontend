@@ -15,14 +15,32 @@
         class="table__row table__row--item"
         v-bind:class="[ index % 2 === 0 ? 'table__row--even' : 'table__row--odd' ]"
       >
-        <div class="table__column">{{ color.name }}</div>
-        <div class="table__column">{{ color.hexCode }}</div>
-        <div class="table__column">
-          <div class="table__color-label" :style="{ 'background-color': color.hexCode }"></div>
-        </div>
-        <div class="table__column">
-          <button class="table__edit"></button>
-        </div>
+        <template v-if="color.id !== colorToUpdate.id">
+          <div class="table__column">{{ color.name }}</div>
+          <div class="table__column">{{ color.hexCode }}</div>
+          <div class="table__column">
+            <div class="table__color-label" :style="{ 'background-color': color.hexCode }"></div>
+          </div>
+          <div class="table__column">
+            <button v-on:click="openColorToUpdate(color)" class="table__button table__button--edit"></button>
+          </div>
+        </template>
+
+        <template v-else>
+          <div class="table__column">
+            <input v-model="colorToUpdate.name" placeholder="e.g. red">
+          </div>
+          <div class="table__column">
+            <input v-model="colorToUpdate.hexCode" placeholder="e.g. #F00">
+          </div>
+          <div class="table__column">
+            <div class="table__color-label" :style="{ 'background-color': color.hexCode }"></div>
+          </div>
+          <div class="table__column">
+            <button v-on:click="updateColor(color)" class="table__button table__button--save"></button>
+            <button v-on:click="closeColorEdit()" class="table__button table__button--close"></button>
+          </div>
+        </template>
       </div>
 
       <div
@@ -39,7 +57,7 @@
           <div class="table__color-label" :style="{ 'background-color': colorToSave.hexCode || '#FFF' }"></div>
         </div>
         <div class="table__column">
-          <button v-on:click="createColor()" class="table__save"></button>
+          <button v-on:click="saveColor()" class="table__button table__button--save"></button>
         </div>
       </div>
       <div
@@ -73,8 +91,14 @@ export default {
         name: '',
         hexCode: '',
       },
+      colorToUpdate: {
+        id: undefined,
+        name: '',
+        hexCode: '',
+      },
       errors: {
         colorCreateErrors: [],
+        colorUpdateErrors: [],
       },
     };
   },
@@ -108,10 +132,79 @@ export default {
         `,
       };
     },
-    async createColor() {
+    openColorToUpdate(color) {
+      this.colorToUpdate = {
+        id: color.id,
+        name: color.name,
+        hexCode: color.hexCode,
+      };
+
+      console.log(this.colorToUpdate);
+    },
+    closeColorEdit() {
+      this.colorToUpdate = {
+        id: undefined,
+        name: '',
+        hexCode: '',
+      };
+    },
+    async updateColor() {
+      try {
+        this.errors.colorUpdateErrors = this.validateColor(this.colorToUpdate);
+
+        if (this.errors.colorUpdateErrors.length > 0) {
+          return;
+        }
+
+        const updateColorQuery = this.getUpdateColorQuery(this.colorToUpdate);
+        const updateColorResponse = await this.$apollo.mutate({
+          mutation: updateColorQuery,
+        });
+        const updatedColor = updateColorResponse.data.updateColor;
+
+        this.$store.commit('toggleInfoPanel', {
+          message: 'Color updated successfully',
+          type: 'success',
+        });
+        this.updateColorsList(updatedColor);
+        this.closeColorEdit();
+      } catch (error) {
+        const parsedError = parseGraphQlErrorMessage(error);
+
+        this.$store.commit('toggleInfoPanel', {
+          message: parsedError,
+          type: 'error',
+        });
+      }
+    },
+    getUpdateColorQuery(updatedColor) {
+      return gql`
+        mutation {
+          updateColor (
+            updateColorInput: {
+              id: ${updatedColor.id},
+              name: "${updatedColor.name}",
+              hexCode: "${updatedColor.hexCode}",
+            }
+          ) {
+            id,
+            name,
+            hexCode,
+          }
+        }
+      `;
+    },
+    updateColorsList(updatedColor) {
+      const colorIndex = this.colors.findIndex((color) =>
+        color.id === updatedColor.id,
+      );
+
+      this.colors[colorIndex] = this.buildColor(updatedColor);
+    },
+    async saveColor() {
       try {
         this.errors.colorCreateErrors = this.validateColor(this.colorToSave);
-        console.log(this.errors.colorCreateErrors);
+
         if (this.errors.colorCreateErrors.length > 0) {
           return;
         }
@@ -206,12 +299,20 @@ export default {
       @include color-label;
     }
 
-    &__edit {
-      @include image-button('../../src/assets/icons/edit.png');
-    }
+    &__button {
+      margin: 10px;
 
-    &__save {
-      @include image-button('../../src/assets/icons/save.png');
+      &--edit {
+        @include image-button('../../src/assets/icons/edit.png');
+      }
+
+      &--save {
+        @include image-button('../../src/assets/icons/save.png');
+      }
+
+      &--close {
+        @include image-button('../../src/assets/icons/close.png');
+      }
     }
   }
 </style>
