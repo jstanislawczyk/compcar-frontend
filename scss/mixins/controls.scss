@@ -70,3 +70,15 @@
     color: $hover-color;
   }
 }
+
+@mixin image-button($url, $width: 16px, $height: 16px) {
+  width: $width;
+  height: $height;
+  background-image: url($url);
+  background-color: transparent;
+  border: none;
+  
+  &:hover {
+    cursor: pointer;
+  }
+}

@@ -86,7 +86,7 @@
       <div class="car__addons">
         <div class="table__row">
           <div class="table__column">Name</div>
-          <div class="table__column table__column--tablet">Description</div>
+          <div class="table__column table__column--desktop">Description</div>
           <div class="table__column">Price (PLN)</div>
         </div>
 
@@ -97,7 +97,7 @@
           v-bind:class="[ index % 2 === 0 ? 'table__row--even' : 'table__row--odd' ]"
         >
           <div class="table__column">{{ addon.name }}</div>
-          <div class="table__column table__column--tablet">{{ addon.description }}</div>
+          <div class="table__column table__column--desktop">{{ addon.description }}</div>
           <div class="table__column">{{ formatPrice(addon.price) }}</div>
         </div>
       </div>
@@ -289,11 +289,10 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  @import 'scss/variables/devices';
-  @import 'scss/variables/colors';
-  @import 'scss/mixins/controls';
   @import 'scss/mixins/breadcrumbs';
   @import 'scss/mixins/pages';
+  @import 'scss/mixins/table';
+  @import 'scss/mixins/labels';
 
   .car {
     @include titled-page;
@@ -304,55 +303,10 @@ export default {
   }
 
   .table {
-    &__row {
-      display: flex;
-      min-height: 50px;
-      border-left: 1px solid $black;
-      border-right: 1px solid $black;
-      background: $black;
-      color: $white;
-      text-align: center;
-
-      &--item {
-        border-left: 1px solid $light-gray;
-        border-right: 1px solid $light-gray;
-        color: $black;
-
-        &:last-child {
-          border-bottom: 1px solid $light-gray;
-        }
-      }
-
-      &--odd {
-        background: $light-gray;
-      }
-
-      &--even {
-        background: $white;
-      }
-    }
-
-    &__column {
-      flex: 1 1 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-
-      &--tablet {
-        @media (max-width: $tablet) {
-          display: none;
-        }
-      }
-    }
-
-    &__link {
-      @include link-underlined;
-    }
+    @include table;
 
     &__color-label {
-      width: 50px;
-      height: 30px;
-      border: 1px solid #000;
+      @include color-label;
     }
   }
 </style>
