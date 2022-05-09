@@ -28,7 +28,7 @@
 
         <template v-else>
           <div class="table__column">
-            <input v-model="colorToUpdate.name" placeholder="e.g. red">
+            <input v-model="colorToUpdate.name" placeholder="e.g. Red">
           </div>
           <div class="table__column">
             <input v-model="colorToUpdate.hexCode" placeholder="e.g. #F00">
@@ -48,7 +48,7 @@
         v-bind:class="[ colors.length % 2 === 0 ? 'table__row--even' : 'table__row--odd' ]"
       >
         <div class="table__column">
-          <input v-model="colorToSave.name" placeholder="e.g. red">
+          <input v-model="colorToSave.name" placeholder="e.g. Red">
         </div>
         <div class="table__column">
           <input v-model="colorToSave.hexCode" placeholder="e.g. #F00">
