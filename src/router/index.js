@@ -12,6 +12,7 @@ import Engine from '@/components/Engine';
 import Admin from '@/components/Admin';
 import AdminColors from '@/components/AdminColors';
 import AdminUsers from '@/components/AdminUsers';
+import AdminAddons from '@/components/AdminAddons';
 
 Vue.use(VueRouter);
 
@@ -70,6 +71,11 @@ const routes = [
         path: '/admin/users',
         name: 'AdminUsers',
         component: AdminUsers,
+      },
+      {
+        path: '/admin/addons',
+        name: 'AdminAddons',
+        component: AdminAddons,
       },
     ],
   },
