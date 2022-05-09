@@ -69,7 +69,6 @@
 
 <script>
 import { parseGraphQlErrorMessage } from '@/common/errors';
-import { isHexCode } from '@/common/text';
 import gql from 'graphql-tag';
 
 export default {
@@ -96,7 +95,6 @@ export default {
     await this.setupAddonsData();
   },
   methods: {
-    isHexCode,
     async setupAddonsData() {
       try {
         const getAllAddonsQuery = this.getAllAddonsQuery();
