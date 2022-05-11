@@ -3,10 +3,12 @@
     <h2 class="colors__title">Colors</h2>
     <div class="table">
       <div class="table__row">
-        <div class="table__column">Name</div>
-        <div class="table__column">Hex code</div>
-        <div class="table__column">Color</div>
-        <div class="table__column"></div>
+        <div class="table__row-content">
+          <div class="table__column">Name</div>
+          <div class="table__column">Hex code</div>
+          <div class="table__column">Color</div>
+          <div class="table__column"></div>
+        </div>
       </div>
 
       <div
@@ -15,7 +17,7 @@
         class="table__row table__row--item"
         v-bind:class="[ index % 2 === 0 ? 'table__row--even' : 'table__row--odd' ]"
       >
-        <template v-if="color.id !== colorToUpdate.id">
+        <div v-if="color.id !== colorToUpdate.id" class="table__row-content">
           <div class="table__column">{{ color.name }}</div>
           <div class="table__column">{{ color.hexCode }}</div>
           <div class="table__column">
@@ -24,11 +26,11 @@
           <div class="table__column">
             <button v-on:click="openColorToUpdate(color)" class="table__button table__button--edit"></button>
           </div>
-        </template>
+        </div>
 
-        <template v-else>
+        <div v-else class="table__row-content">
           <div class="table__column">
-            <input v-model="colorToUpdate.name" placeholder="e.g. red">
+            <input v-model="colorToUpdate.name" placeholder="e.g. Red">
           </div>
           <div class="table__column">
             <input v-model="colorToUpdate.hexCode" placeholder="e.g. #F00">
@@ -40,38 +42,52 @@
             <button v-on:click="updateColor(color)" class="table__button table__button--save"></button>
             <button v-on:click="closeColorEdit()" class="table__button table__button--close"></button>
           </div>
-        </template>
+        </div>
+
+        <div
+          v-if="color.id === colorToUpdate.id && errors.colorUpdateErrors.length > 0"
+          class="table__row-errors"
+        >
+          <p
+            v-for="error in errors.colorUpdateErrors"
+            v-bind:key="error"
+            class="table__error"
+          >
+            {{ error }}
+          </p>
+        </div>
       </div>
 
       <div
         class="table__row table__row--item"
         v-bind:class="[ colors.length % 2 === 0 ? 'table__row--even' : 'table__row--odd' ]"
       >
-        <div class="table__column">
-          <input v-model="colorToSave.name" placeholder="e.g. red">
+        <div class="table__row-content">
+          <div class="table__column">
+            <input v-model="colorToSave.name" placeholder="e.g. Red">
+          </div>
+          <div class="table__column">
+            <input v-model="colorToSave.hexCode" placeholder="e.g. #F00">
+          </div>
+          <div class="table__column">
+            <div class="table__color-label" :style="{ 'background-color': colorToSave.hexCode || '#FFF' }"></div>
+          </div>
+          <div class="table__column">
+            <button v-on:click="saveColor()" class="table__button table__button--save"></button>
+          </div>
         </div>
-        <div class="table__column">
-          <input v-model="colorToSave.hexCode" placeholder="e.g. #F00">
-        </div>
-        <div class="table__column">
-          <div class="table__color-label" :style="{ 'background-color': colorToSave.hexCode || '#FFF' }"></div>
-        </div>
-        <div class="table__column">
-          <button v-on:click="saveColor()" class="table__button table__button--save"></button>
-        </div>
-      </div>
-      <div
-        v-if="errors.colorCreateErrors.length > 0"
-        class="table__row table__row--item table__row--errors"
-        v-bind:class="[ colors.length % 2 === 0 ? 'table__row--even' : 'table__row--odd' ]"
-      >
-        <p
-          v-for="error in errors.colorCreateErrors"
-          v-bind:key="error"
-          class="table__error"
+        <div
+          v-if="errors.colorCreateErrors.length > 0"
+          class="table__row-errors"
         >
-          {{ error }}
-        </p>
+          <p
+            v-for="error in errors.colorCreateErrors"
+            v-bind:key="error"
+            class="table__error"
+          >
+            {{ error }}
+          </p>
+        </div>
       </div>
     </div>
   </section>
@@ -133,15 +149,15 @@ export default {
       };
     },
     openColorToUpdate(color) {
+      this.closeColorEdit();
       this.colorToUpdate = {
         id: color.id,
         name: color.name,
         hexCode: color.hexCode,
       };
-
-      console.log(this.colorToUpdate);
     },
     closeColorEdit() {
+      this.errors.colorUpdateErrors = [];
       this.colorToUpdate = {
         id: undefined,
         name: '',
@@ -293,26 +309,10 @@ export default {
   }
 
   .table {
-    @include table;
+    @include editable-table;
 
     &__color-label {
       @include color-label;
-    }
-
-    &__button {
-      margin: 10px;
-
-      &--edit {
-        @include image-button('../../src/assets/icons/edit.png');
-      }
-
-      &--save {
-        @include image-button('../../src/assets/icons/save.png');
-      }
-
-      &--close {
-        @include image-button('../../src/assets/icons/close.png');
-      }
     }
   }
 </style>

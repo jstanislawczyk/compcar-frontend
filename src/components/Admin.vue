@@ -5,6 +5,7 @@
         <h3 class="management__title">Management</h3>
         <router-link to="/admin/users" class="management__link">Users</router-link>
         <router-link to="/admin/colors" class="management__link">Colors</router-link>
+        <router-link to="/admin/addons" class="management__link">Addons</router-link>
         <button v-on:click="toggleMobileManagementPanel()" class="management__close"></button>
       </div>
     </div>
