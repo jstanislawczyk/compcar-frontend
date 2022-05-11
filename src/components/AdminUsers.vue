@@ -53,7 +53,6 @@ export default {
 
         const users = usersResponse.data.getUsers;
         this.users = this.buildUsers(users);
-        console.log(this.users);
       } catch (error) {
         const parsedError = parseGraphQlErrorMessage(error);
         console.log(parsedError);
