@@ -298,7 +298,6 @@ export default {
 <style scoped lang="scss">
   @import 'scss/mixins/table';
   @import 'scss/mixins/labels';
-  @import 'scss/mixins/controls';
 
   .colors {
     &__title {
