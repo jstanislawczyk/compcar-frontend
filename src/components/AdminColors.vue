@@ -155,8 +155,6 @@ export default {
         name: color.name,
         hexCode: color.hexCode,
       };
-
-      console.log(this.colorToUpdate);
     },
     closeColorEdit() {
       this.errors.colorUpdateErrors = [];
@@ -315,22 +313,6 @@ export default {
 
     &__color-label {
       @include color-label;
-    }
-
-    &__button {
-      margin: 10px;
-
-      &--edit {
-        @include image-button('../../src/assets/icons/edit.png');
-      }
-
-      &--save {
-        @include image-button('../../src/assets/icons/save.png');
-      }
-
-      &--close {
-        @include image-button('../../src/assets/icons/close.png');
-      }
     }
   }
 </style>

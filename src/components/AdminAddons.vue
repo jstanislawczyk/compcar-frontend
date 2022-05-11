@@ -3,9 +3,12 @@
     <h2 class="addons__title">Addons</h2>
     <div class="table">
       <div class="table__row">
-        <div class="table__column">Name</div>
-        <div class="table__column">Description</div>
-        <div class="table__column"></div>
+
+        <div class="table__row-content">
+          <div class="table__column">Name</div>
+          <div class="table__column">Description</div>
+          <div class="table__column"></div>
+        </div>
       </div>
 
       <div
@@ -14,15 +17,15 @@
         class="table__row table__row--item"
         v-bind:class="[ index % 2 === 0 ? 'table__row--even' : 'table__row--odd' ]"
       >
-        <template v-if="addon.id !== addonToUpdate.id">
+        <div v-if="addon.id !== addonToUpdate.id" class="table__row-content">
           <div class="table__column">{{ addon.name }}</div>
           <div class="table__column">{{ addon.description }}</div>
           <div class="table__column">
             <button v-on:click="openAddonToUpdate(addon)" class="table__button table__button--edit"></button>
           </div>
-        </template>
+        </div>
 
-        <template v-else>
+        <div v-else class="table__row-content">
           <div class="table__column">
             <input v-model="addonToUpdate.name" placeholder="e.g. Air conditioner">
           </div>
@@ -33,35 +36,51 @@
             <button v-on:click="updateAddon(addon)" class="table__button table__button--save"></button>
             <button v-on:click="closeAddonEdit()" class="table__button table__button--close"></button>
           </div>
-        </template>
+        </div>
+
+        <div
+          v-if="addon.id === addonToUpdate.id && errors.addonUpdateErrors.length > 0"
+          class="table__row-errors"
+        >
+          <p
+            v-for="error in errors.addonUpdateErrors"
+            v-bind:key="error"
+            class="table__error"
+          >
+            {{ error }}
+          </p>
+        </div>
       </div>
 
       <div
         class="table__row table__row--item"
         v-bind:class="[ addons.length % 2 === 0 ? 'table__row--even' : 'table__row--odd' ]"
       >
-        <div class="table__column">
-          <input v-model="addonToSave.name" placeholder="e.g. Air conditioner">
+        <div class="table__row-content">
+          <div class="table__column">
+            <input v-model="addonToSave.name" placeholder="e.g. Air conditioner">
+          </div>
+          <div class="table__column">
+            <input v-model="addonToSave.description" placeholder="e.g. Temperature cooling">
+          </div>
+          <div class="table__column">
+            <button v-on:click="saveAddon()" class="table__button table__button--save"></button>
+          </div>
         </div>
-        <div class="table__column">
-          <input v-model="addonToSave.description" placeholder="e.g. Temperature cooling">
-        </div>
-        <div class="table__column">
-          <button v-on:click="saveAddon()" class="table__button table__button--save"></button>
-        </div>
-      </div>
-      <div
-        v-if="errors.addonCreateErrors.length > 0"
-        class="table__row table__row--item table__row--errors"
-        v-bind:class="[ addons.length % 2 === 0 ? 'table__row--even' : 'table__row--odd' ]"
-      >
-        <p
-          v-for="error in errors.addonCreateErrors"
-          v-bind:key="error"
-          class="table__error"
+
+        <div
+          v-if="errors.addonCreateErrors.length > 0"
+          class="table__row-errors"
+          v-bind:class="[ addons.length % 2 === 0 ? 'table__row--even' : 'table__row--odd' ]"
         >
-          {{ error }}
-        </p>
+          <p
+            v-for="error in errors.addonCreateErrors"
+            v-bind:key="error"
+            class="table__error"
+          >
+            {{ error }}
+          </p>
+        </div>
       </div>
     </div>
   </section>
@@ -121,15 +140,15 @@ export default {
       };
     },
     openAddonToUpdate(addon) {
+      this.closeAddonEdit();
       this.addonToUpdate = {
         id: addon.id,
         name: addon.name,
         description: addon.description,
       };
-
-      console.log(this.addonToUpdate);
     },
     closeAddonEdit() {
+      this.errors.addonUpdateErrors = [];
       this.addonToUpdate = {
         id: undefined,
         name: '',
@@ -281,22 +300,6 @@ export default {
   }
 
   .table {
-    @include table;
-
-    &__button {
-      margin: 10px;
-
-      &--edit {
-        @include image-button('../../src/assets/icons/edit.png');
-      }
-
-      &--save {
-        @include image-button('../../src/assets/icons/save.png');
-      }
-
-      &--close {
-        @include image-button('../../src/assets/icons/close.png');
-      }
-    }
+    @include editable-table;
   }
 </style>

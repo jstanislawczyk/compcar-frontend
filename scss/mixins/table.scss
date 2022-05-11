@@ -76,4 +76,20 @@
       margin-bottom: 15px;
     }
   }
+
+  &__button {
+    margin: 10px;
+
+    &--edit {
+      @include image-button('../../src/assets/icons/edit.png');
+    }
+
+    &--save {
+      @include image-button('../../src/assets/icons/save.png');
+    }
+
+    &--close {
+      @include image-button('../../src/assets/icons/close.png');
+    }
+  }
 }

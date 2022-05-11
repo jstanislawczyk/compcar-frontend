@@ -35,9 +35,11 @@
       <p class="car__subtitle car__subtitle--spacing">Engines</p>
       <div class="car__paintings">
         <div class="table__row">
-          <div class="table__column">Name</div>
-          <div class="table__column">Fuel type</div>
-          <div class="table__column">Price (PLN)</div>
+          <div class="table__row-content">
+            <div class="table__column">Name</div>
+            <div class="table__column">Fuel type</div>
+            <div class="table__column">Price (PLN)</div>
+          </div>
         </div>
 
         <div
@@ -46,13 +48,16 @@
           class="table__row table__row--item"
           v-bind:class="[ index % 2 === 0 ? 'table__row--even' : 'table__row--odd' ]"
         >
-          <div class="table__column">
-            <router-link :to="`/engine/${engine.engine.id}`" class="table__link">
-              {{ engine.engine.name }}
-            </router-link>
+
+          <div class="table__row-content">
+            <div class="table__column">
+              <router-link :to="`/engine/${engine.engine.id}`" class="table__link">
+                {{ engine.engine.name }}
+              </router-link>
+            </div>
+            <div class="table__column">{{ engine.engine.fuelType }}</div>
+            <div class="table__column">{{ formatPrice(engine.price) }}</div>
           </div>
-          <div class="table__column">{{ engine.engine.fuelType }}</div>
-          <div class="table__column">{{ formatPrice(engine.price) }}</div>
         </div>
       </div>
     </template>
@@ -61,9 +66,11 @@
       <p class="car__subtitle car__subtitle--spacing">Paintings</p>
       <div class="car__paintings">
         <div class="table__row">
-          <div class="table__column">Name</div>
-          <div class="table__column">Color</div>
-          <div class="table__column">Price (PLN)</div>
+          <div class="table__row-content">
+            <div class="table__column">Name</div>
+            <div class="table__column">Color</div>
+            <div class="table__column">Price (PLN)</div>
+          </div>
         </div>
 
         <div
@@ -72,11 +79,14 @@
           class="table__row table__row--item"
           v-bind:class="[ index % 2 === 0 ? 'table__row--even' : 'table__row--odd' ]"
         >
-          <div class="table__column">{{ painting.color.name }}</div>
-          <div class="table__column">
-            <div class="table__color-label" :style="{ 'background-color': painting.color.hexCode }"></div>
-          </div>
-          <div class="table__column">{{ formatPrice(painting.price) }}</div>
+
+          <div class="table__row-content">
+            <div class="table__column">{{ painting.color.name }}</div>
+            <div class="table__column">
+              <div class="table__color-label" :style="{ 'background-color': painting.color.hexCode }"></div>
+            </div>
+            <div class="table__column">{{ formatPrice(painting.price) }}</div>
+            </div>
         </div>
       </div>
     </template>
@@ -85,9 +95,11 @@
       <p class="car__subtitle car__subtitle--spacing">Available addons</p>
       <div class="car__addons">
         <div class="table__row">
-          <div class="table__column">Name</div>
-          <div class="table__column table__column--desktop">Description</div>
-          <div class="table__column">Price (PLN)</div>
+          <div class="table__row-content">
+            <div class="table__column">Name</div>
+            <div class="table__column table__column--desktop">Description</div>
+            <div class="table__column">Price (PLN)</div>
+          </div>
         </div>
 
         <div
@@ -96,9 +108,12 @@
           class="table__row table__row--item"
           v-bind:class="[ index % 2 === 0 ? 'table__row--even' : 'table__row--odd' ]"
         >
-          <div class="table__column">{{ addon.name }}</div>
-          <div class="table__column table__column--desktop">{{ addon.description }}</div>
-          <div class="table__column">{{ formatPrice(addon.price) }}</div>
+
+          <div class="table__row-content">
+            <div class="table__column">{{ addon.name }}</div>
+            <div class="table__column table__column--desktop">{{ addon.description }}</div>
+            <div class="table__column">{{ formatPrice(addon.price) }}</div>
+          </div>
         </div>
       </div>
     </template>
