@@ -10,6 +10,7 @@ import Generation from '@/components/Generation';
 import Car from '@/components/Car';
 import Engine from '@/components/Engine';
 import Admin from '@/components/Admin';
+import AdminCars from '@/components/AdminCars';
 import AdminColors from '@/components/AdminColors';
 import AdminUsers from '@/components/AdminUsers';
 import AdminAddons from '@/components/AdminAddons';
@@ -63,14 +64,19 @@ const routes = [
     component: Admin,
     children: [
       {
-        path: '/admin/colors',
-        name: 'AdminColors',
-        component: AdminColors,
-      },
-      {
         path: '/admin/users',
         name: 'AdminUsers',
         component: AdminUsers,
+      },
+      {
+        path: '/admin/cars',
+        name: 'AdminCars',
+        component: AdminCars,
+      },
+      {
+        path: '/admin/colors',
+        name: 'AdminColors',
+        component: AdminColors,
       },
       {
         path: '/admin/addons',

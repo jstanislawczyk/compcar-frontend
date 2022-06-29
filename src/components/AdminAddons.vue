@@ -27,10 +27,10 @@
 
         <div v-else class="table__row-content">
           <div class="table__column">
-            <input v-model="addonToUpdate.name" placeholder="e.g. Air conditioner">
+            <input v-model="addonToUpdate.name" class="column__input" placeholder="e.g. Air conditioner">
           </div>
           <div class="table__column">
-            <input v-model="addonToUpdate.description" placeholder="e.g. Temperature cooling">
+            <input v-model="addonToUpdate.description" class="column__input column__input--long" placeholder="e.g. Temperature cooling">
           </div>
           <div class="table__column">
             <button v-on:click="updateAddon(addon)" class="table__button table__button--save"></button>
@@ -58,10 +58,10 @@
       >
         <div class="table__row-content">
           <div class="table__column">
-            <input v-model="addonToSave.name" placeholder="e.g. Air conditioner">
+            <input v-model="addonToSave.name" class="column__input" placeholder="e.g. Air conditioner">
           </div>
           <div class="table__column">
-            <input v-model="addonToSave.description" placeholder="e.g. Temperature cooling">
+            <input v-model="addonToSave.description" class="column__input column__input--long" placeholder="e.g. Temperature cooling">
           </div>
           <div class="table__column">
             <button v-on:click="saveAddon()" class="table__button table__button--save"></button>

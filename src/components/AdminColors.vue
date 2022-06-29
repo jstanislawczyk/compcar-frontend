@@ -30,10 +30,10 @@
 
         <div v-else class="table__row-content">
           <div class="table__column">
-            <input v-model="colorToUpdate.name" placeholder="e.g. Red">
+            <input v-model="colorToUpdate.name" class="column__input" placeholder="e.g. Red">
           </div>
           <div class="table__column">
-            <input v-model="colorToUpdate.hexCode" placeholder="e.g. #F00">
+            <input v-model="colorToUpdate.hexCode" class="column__input" placeholder="e.g. #F00">
           </div>
           <div class="table__column">
             <div class="table__color-label" :style="{ 'background-color': color.hexCode }"></div>
@@ -64,10 +64,10 @@
       >
         <div class="table__row-content">
           <div class="table__column">
-            <input v-model="colorToSave.name" placeholder="e.g. Red">
+            <input v-model="colorToSave.name" class="column__input" placeholder="e.g. Red">
           </div>
           <div class="table__column">
-            <input v-model="colorToSave.hexCode" placeholder="e.g. #F00">
+            <input v-model="colorToSave.hexCode" class="column__input" placeholder="e.g. #F00">
           </div>
           <div class="table__column">
             <div class="table__color-label" :style="{ 'background-color': colorToSave.hexCode || '#FFF' }"></div>

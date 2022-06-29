@@ -209,6 +209,9 @@ export default {
                     id,
                     name,
                     basePrice,
+                    photos {
+                      url,
+                    },
                   },
                 },
               },

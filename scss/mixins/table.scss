@@ -92,4 +92,14 @@
       @include image-button('../../src/assets/icons/close.png');
     }
   }
+
+  .column {
+    &__input {
+      width: 70%;
+
+      &--long {
+        width: 95%;
+      }
+    }
+  }
 }

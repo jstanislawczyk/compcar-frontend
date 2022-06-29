@@ -85,18 +85,18 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import 'scss/mixins/table';
-@import 'scss/mixins/controls';
+  @import 'scss/mixins/table';
+  @import 'scss/mixins/controls';
 
-.users {
-  &__title {
-    margin-top: 0;
-    font-size: 30px;
-    text-align: left;
+  .users {
+    &__title {
+      margin-top: 0;
+      font-size: 30px;
+      text-align: left;
+    }
   }
-}
 
-.table {
-  @include table;
-}
+  .table {
+    @include table;
+  }
 </style>
