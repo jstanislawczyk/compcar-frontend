@@ -70,7 +70,15 @@ export default {
             },
           }
         `,
+        context: {
+          headers: {
+            Authorization: `Bearer ${this.getAuthToken()}`,
+          },
+        },
       };
+    },
+    getAuthToken() {
+      return this.$store.getters.getAuthToken;
     },
     buildUsers(users) {
       return users.map((user) => ({

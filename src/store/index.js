@@ -17,6 +17,16 @@ export default new Vuex.Store({
       token: undefined,
     },
   },
+  getters: {
+    getAuthToken(state) {
+      if (!state.authentication.token) {
+        const cachedToken = localStorage.getItem('authToken');
+        state.authentication.token = cachedToken || undefined;
+      }
+
+      return state.authentication.token;
+    },
+  },
   mutations: {
     toggleInfoPanel(state, infoPanelData) {
       this.state.infoPanel.message = infoPanelData.message || 'Unknown message';

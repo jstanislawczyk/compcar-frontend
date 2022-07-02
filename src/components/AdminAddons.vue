@@ -163,10 +163,8 @@ export default {
           return;
         }
 
-        const updateAddonQuery = this.getUpdateAddonQuery(this.addonToUpdate);
-        const updateAddonResponse = await this.$apollo.mutate({
-          mutation: updateAddonQuery,
-        });
+        const updateAddonMutation = this.getUpdateAddonMutation(this.addonToUpdate);
+        const updateAddonResponse = await this.$apollo.mutate(updateAddonMutation);
         const updatedAddon = updateAddonResponse.data.updateAddon;
 
         this.$store.commit('toggleInfoPanel', {
@@ -184,22 +182,29 @@ export default {
         });
       }
     },
-    getUpdateAddonQuery(updatedAddon) {
-      return gql`
-        mutation {
-          updateAddon (
-            updateAddonInput: {
-              id: ${updatedAddon.id},
-              name: "${updatedAddon.name}",
-              description: "${updatedAddon.description}",
+    getUpdateAddonMutation(updatedAddon) {
+      return {
+        mutation: gql`
+          mutation {
+            updateAddon (
+              updateAddonInput: {
+                id: ${updatedAddon.id},
+                name: "${updatedAddon.name}",
+                description: "${updatedAddon.description}",
+              }
+            ) {
+              id,
+              name,
+              description,
             }
-          ) {
-            id,
-            name,
-            description,
           }
-        }
-      `;
+        `,
+        context: {
+          headers: {
+            Authorization: `Bearer ${this.getAuthToken()}`,
+          },
+        },
+      };
     },
     updateAddonsList(updatedAddon) {
       const addonIndex = this.addons.findIndex((addon) =>
@@ -216,10 +221,8 @@ export default {
           return;
         }
 
-        const createAddonQuery = this.getCreateAddonQuery(this.addonToSave);
-        const createAddonResponse = await this.$apollo.mutate({
-          mutation: createAddonQuery,
-        });
+        const createAddonMutation = this.getCreateAddonMutation(this.addonToSave);
+        const createAddonResponse = await this.$apollo.mutate(createAddonMutation);
         const newAddon = createAddonResponse.data.createAddon;
 
         this.$store.commit('toggleInfoPanel', {
@@ -237,21 +240,28 @@ export default {
         });
       }
     },
-    getCreateAddonQuery(newAddon) {
-      return gql`
-        mutation {
-          createAddon (
-            createAddonInput: {
-              name: "${newAddon.name}",
-              description: "${newAddon.description}",
+    getCreateAddonMutation(newAddon) {
+      return {
+        mutation: gql`
+          mutation {
+            createAddon (
+              createAddonInput: {
+                name: "${newAddon.name}",
+                description: "${newAddon.description}",
+              }
+            ) {
+              id,
+              name,
+              description,
             }
-          ) {
-            id,
-            name,
-            description,
           }
-        }
-      `;
+        `,
+        context: {
+          headers: {
+            Authorization: `Bearer ${this.getAuthToken()}`,
+          },
+        },
+      };
     },
     buildAddons(addons) {
       return addons.map((addon) => this.buildAddon(addon));
@@ -281,6 +291,9 @@ export default {
       }
 
       return addonErrors;
+    },
+    getAuthToken() {
+      return this.$store.getters.getAuthToken;
     },
   },
 };

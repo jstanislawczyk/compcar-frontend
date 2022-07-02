@@ -172,10 +172,8 @@ export default {
           return;
         }
 
-        const updateColorQuery = this.getUpdateColorQuery(this.colorToUpdate);
-        const updateColorResponse = await this.$apollo.mutate({
-          mutation: updateColorQuery,
-        });
+        const updateColorMutation = this.getUpdateColorMutation(this.colorToUpdate);
+        const updateColorResponse = await this.$apollo.mutate(updateColorMutation);
         const updatedColor = updateColorResponse.data.updateColor;
 
         this.$store.commit('toggleInfoPanel', {
@@ -193,22 +191,29 @@ export default {
         });
       }
     },
-    getUpdateColorQuery(updatedColor) {
-      return gql`
-        mutation {
-          updateColor (
-            updateColorInput: {
-              id: ${updatedColor.id},
-              name: "${updatedColor.name}",
-              hexCode: "${updatedColor.hexCode}",
+    getUpdateColorMutation(updatedColor) {
+      return {
+        mutation: gql`
+          mutation {
+            updateColor (
+              updateColorInput: {
+                id: ${updatedColor.id},
+                name: "${updatedColor.name}",
+                hexCode: "${updatedColor.hexCode}",
+              }
+            ) {
+              id,
+              name,
+              hexCode,
             }
-          ) {
-            id,
-            name,
-            hexCode,
           }
-        }
-      `;
+        `,
+        context: {
+          headers: {
+            Authorization: `Bearer ${this.getAuthToken()}`,
+          },
+        },
+      };
     },
     updateColorsList(updatedColor) {
       const colorIndex = this.colors.findIndex((color) =>
@@ -225,10 +230,8 @@ export default {
           return;
         }
 
-        const createColorQuery = this.getCreateColorQuery(this.colorToSave);
-        const createColorResponse = await this.$apollo.mutate({
-          mutation: createColorQuery,
-        });
+        const createColorMutation = this.getCreateColorMutation(this.colorToSave);
+        const createColorResponse = await this.$apollo.mutate(createColorMutation);
         const newColor = createColorResponse.data.createColor;
 
         this.$store.commit('toggleInfoPanel', {
@@ -246,21 +249,28 @@ export default {
         });
       }
     },
-    getCreateColorQuery(newColor) {
-      return gql`
-        mutation {
-          createColor (
-            createColorInput: {
-              name: "${newColor.name}",
-              hexCode: "${newColor.hexCode}",
+    getCreateColorMutation(newColor) {
+      return {
+        mutation: gql`
+          mutation {
+            createColor (
+              createColorInput: {
+                name: "${newColor.name}",
+                hexCode: "${newColor.hexCode}",
+              }
+            ) {
+              id,
+              name,
+              hexCode,
             }
-          ) {
-            id,
-            name,
-            hexCode,
           }
-        }
-      `;
+        `,
+        context: {
+          headers: {
+            Authorization: `Bearer ${this.getAuthToken()}`,
+          },
+        },
+      };
     },
     buildColors(colors) {
       return colors.map((color) => this.buildColor(color));
@@ -290,6 +300,9 @@ export default {
       }
 
       return colorErrors;
+    },
+    getAuthToken() {
+      return this.$store.getters.getAuthToken;
     },
   },
 };
