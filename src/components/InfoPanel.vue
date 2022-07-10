@@ -90,5 +90,15 @@ export default {
     &--error &__icon  {
       background-image: url('../assets/icons/error.svg');
     }
+
+    &--info {
+      border: 1px solid $dark-blue;
+      background: $light-blue;
+      color: $dark-blue;
+    }
+
+    &--info &__icon  {
+      background-image: url('../assets/icons/info.png');
+    }
   }
 </style>

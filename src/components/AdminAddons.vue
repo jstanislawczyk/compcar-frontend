@@ -163,7 +163,19 @@ export default {
           return;
         }
 
-        const updateAddonMutation = this.getUpdateAddonMutation(this.addonToUpdate);
+        const token = this.getAuthToken();
+
+        if (!token) {
+          await this.$router.push('/login');
+          this.$store.commit('toggleInfoPanel', {
+            message: 'Token expired. Please log in',
+            type: 'info',
+          });
+
+          return;
+        }
+
+        const updateAddonMutation = this.getUpdateAddonMutation(this.addonToUpdate, token);
         const updateAddonResponse = await this.$apollo.mutate(updateAddonMutation);
         const updatedAddon = updateAddonResponse.data.updateAddon;
 
@@ -182,7 +194,7 @@ export default {
         });
       }
     },
-    getUpdateAddonMutation(updatedAddon) {
+    getUpdateAddonMutation(updatedAddon, token) {
       return {
         mutation: gql`
           mutation {
@@ -201,7 +213,7 @@ export default {
         `,
         context: {
           headers: {
-            Authorization: `Bearer ${this.getAuthToken()}`,
+            Authorization: `Bearer ${token}`,
           },
         },
       };
@@ -221,7 +233,19 @@ export default {
           return;
         }
 
-        const createAddonMutation = this.getCreateAddonMutation(this.addonToSave);
+        const token = this.getAuthToken();
+
+        if (!token) {
+          await this.$router.push('/login');
+          this.$store.commit('toggleInfoPanel', {
+            message: 'Token expired. Please log in',
+            type: 'info',
+          });
+
+          return;
+        }
+
+        const createAddonMutation = this.getCreateAddonMutation(this.addonToSave, token);
         const createAddonResponse = await this.$apollo.mutate(createAddonMutation);
         const newAddon = createAddonResponse.data.createAddon;
 
@@ -240,7 +264,7 @@ export default {
         });
       }
     },
-    getCreateAddonMutation(newAddon) {
+    getCreateAddonMutation(newAddon, token) {
       return {
         mutation: gql`
           mutation {
@@ -258,7 +282,7 @@ export default {
         `,
         context: {
           headers: {
-            Authorization: `Bearer ${this.getAuthToken()}`,
+            Authorization: `Bearer ${token}`,
           },
         },
       };

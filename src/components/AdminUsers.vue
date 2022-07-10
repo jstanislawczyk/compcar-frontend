@@ -48,7 +48,19 @@ export default {
   methods: {
     async setupUsersData() {
       try {
-        const getAllUsersQuery = this.getAllUsersQuery();
+        const token = this.getAuthToken();
+
+        if (!token) {
+          await this.$router.push('/login');
+          this.$store.commit('toggleInfoPanel', {
+            message: 'Token expired. Please log in',
+            type: 'info',
+          });
+
+          return;
+        }
+
+        const getAllUsersQuery = this.getAllUsersQuery(token);
         const usersResponse = await this.$apollo.query(getAllUsersQuery);
 
         const users = usersResponse.data.getUsers;
@@ -58,7 +70,7 @@ export default {
         console.log(parsedError);
       }
     },
-    getAllUsersQuery() {
+    getAllUsersQuery(token) {
       return {
         query: gql`
           {
@@ -72,7 +84,7 @@ export default {
         `,
         context: {
           headers: {
-            Authorization: `Bearer ${this.getAuthToken()}`,
+            Authorization: `Bearer ${token}`,
           },
         },
       };
