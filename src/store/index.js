@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import jwtDecode from 'jwt-decode';
 
 Vue.use(Vuex);
 
@@ -15,6 +16,30 @@ export default new Vuex.Store({
     },
     authentication: {
       token: undefined,
+    },
+  },
+  getters: {
+    getAuthToken(state) {
+      let token = state.authentication.token;
+
+      if (!token) {
+        const cachedToken = localStorage.getItem('authToken');
+        token = cachedToken || undefined;
+      }
+
+      if (token) {
+        const decodedToken = jwtDecode(token);
+        const isTokenExpired = decodedToken.exp < (Date.now() / 1000);
+
+        if (isTokenExpired) {
+          localStorage.removeItem('authToken');
+          token = undefined;
+        }
+      }
+
+      state.authentication.token = token;
+
+      return state.authentication.token;
     },
   },
   mutations: {

@@ -163,10 +163,20 @@ export default {
           return;
         }
 
-        const updateAddonQuery = this.getUpdateAddonQuery(this.addonToUpdate);
-        const updateAddonResponse = await this.$apollo.mutate({
-          mutation: updateAddonQuery,
-        });
+        const token = this.getAuthToken();
+
+        if (!token) {
+          await this.$router.push('/login');
+          this.$store.commit('toggleInfoPanel', {
+            message: 'Token expired. Please log in',
+            type: 'info',
+          });
+
+          return;
+        }
+
+        const updateAddonMutation = this.getUpdateAddonMutation(this.addonToUpdate, token);
+        const updateAddonResponse = await this.$apollo.mutate(updateAddonMutation);
         const updatedAddon = updateAddonResponse.data.updateAddon;
 
         this.$store.commit('toggleInfoPanel', {
@@ -184,22 +194,29 @@ export default {
         });
       }
     },
-    getUpdateAddonQuery(updatedAddon) {
-      return gql`
-        mutation {
-          updateAddon (
-            updateAddonInput: {
-              id: ${updatedAddon.id},
-              name: "${updatedAddon.name}",
-              description: "${updatedAddon.description}",
+    getUpdateAddonMutation(updatedAddon, token) {
+      return {
+        mutation: gql`
+          mutation {
+            updateAddon (
+              updateAddonInput: {
+                id: ${updatedAddon.id},
+                name: "${updatedAddon.name}",
+                description: "${updatedAddon.description}",
+              }
+            ) {
+              id,
+              name,
+              description,
             }
-          ) {
-            id,
-            name,
-            description,
           }
-        }
-      `;
+        `,
+        context: {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      };
     },
     updateAddonsList(updatedAddon) {
       const addonIndex = this.addons.findIndex((addon) =>
@@ -216,10 +233,20 @@ export default {
           return;
         }
 
-        const createAddonQuery = this.getCreateAddonQuery(this.addonToSave);
-        const createAddonResponse = await this.$apollo.mutate({
-          mutation: createAddonQuery,
-        });
+        const token = this.getAuthToken();
+
+        if (!token) {
+          await this.$router.push('/login');
+          this.$store.commit('toggleInfoPanel', {
+            message: 'Token expired. Please log in',
+            type: 'info',
+          });
+
+          return;
+        }
+
+        const createAddonMutation = this.getCreateAddonMutation(this.addonToSave, token);
+        const createAddonResponse = await this.$apollo.mutate(createAddonMutation);
         const newAddon = createAddonResponse.data.createAddon;
 
         this.$store.commit('toggleInfoPanel', {
@@ -237,21 +264,28 @@ export default {
         });
       }
     },
-    getCreateAddonQuery(newAddon) {
-      return gql`
-        mutation {
-          createAddon (
-            createAddonInput: {
-              name: "${newAddon.name}",
-              description: "${newAddon.description}",
+    getCreateAddonMutation(newAddon, token) {
+      return {
+        mutation: gql`
+          mutation {
+            createAddon (
+              createAddonInput: {
+                name: "${newAddon.name}",
+                description: "${newAddon.description}",
+              }
+            ) {
+              id,
+              name,
+              description,
             }
-          ) {
-            id,
-            name,
-            description,
           }
-        }
-      `;
+        `,
+        context: {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      };
     },
     buildAddons(addons) {
       return addons.map((addon) => this.buildAddon(addon));
@@ -281,6 +315,9 @@ export default {
       }
 
       return addonErrors;
+    },
+    getAuthToken() {
+      return this.$store.getters.getAuthToken;
     },
   },
 };
