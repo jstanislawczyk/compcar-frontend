@@ -97,9 +97,9 @@ export default {
     async register() {
       try {
         await this.$apollo.mutate({
-          mutation: this.getRegisterQuery(),
+          mutation: this.getRegisterMutation(),
         });
-        await this.$router.push('/login');
+        await this.$router.push('/register/success');
         this.$store.commit('toggleInfoPanel', {
           message: 'User registered successfully',
           type: 'success',
@@ -110,7 +110,7 @@ export default {
         this.errors.push(parsedError);
       }
     },
-    getRegisterQuery() {
+    getRegisterMutation() {
       return gql`
         mutation {
           register (

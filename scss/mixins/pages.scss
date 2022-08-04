@@ -155,3 +155,19 @@
     }
   }
 }
+
+@mixin information-page() {
+  padding: 40px 0;
+
+  &__header {
+    font-size: 40px;
+  }
+
+  &__link {
+    @include link-inline-underlined;
+  }
+
+  &__error {
+    color: $red;
+  }
+}
