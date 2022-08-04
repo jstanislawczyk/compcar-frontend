@@ -2,6 +2,7 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Home from '@/views/Home';
 import NotFound from '@/views/NotFound';
+import RegisterSuccess from '@/views/RegisterSuccess';
 import ModelsSearch from '@/components/ModelsSearch';
 import Model from '@/components/Model';
 import Login from '@/components/Login';
@@ -13,6 +14,7 @@ import Admin from '@/components/Admin';
 import AdminColors from '@/components/AdminColors';
 import AdminUsers from '@/components/AdminUsers';
 import AdminAddons from '@/components/AdminAddons';
+import RegisterConfirmation from '@/components/RegisterConfirmation';
 
 Vue.use(VueRouter);
 
@@ -26,6 +28,16 @@ const routes = [
     path: '/register',
     name: 'Register',
     component: Register,
+  },
+  {
+    path: '/register/success',
+    name: 'RegisterSuccess',
+    component: RegisterSuccess,
+  },
+  {
+    path: '/register/confirmation/:code',
+    name: 'RegisterConfirmation',
+    component: RegisterConfirmation,
   },
   {
     path: '/login',

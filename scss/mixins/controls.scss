@@ -27,6 +27,15 @@
   }
 }
 
+@mixin link-inline-underlined($color: $pink, $padding: .1em, $time: 300ms) {
+  text-decoration: none;
+  color: $color;
+
+  &:hover, &:focus {
+    text-decoration: underline;
+  }
+}
+
 @mixin link-underlined($color: $pink, $padding: .1em, $time: 300ms) {
   display: block;
   position: relative;
